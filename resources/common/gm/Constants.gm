@@ -1,0 +1,24 @@
+global PI = 3.14159265f;
+global TWICE_PI = PI*2.0f;
+global EXP = 2.71828182846f;
+
+// predeclare type ids
+global g_type_id = 
+{
+	int		= typeId(1),
+	float	= typeId(1.0f),
+	v2		= typeId(v2(1.0f)),
+	v2i		= typeId(v2i(1)),
+	v3		= typeId(v3(1.0f)),
+	string	= typeId("funky"),
+	table_t = typeId({}),
+	null_t  = typeId(null),
+};
+
+global GetEmptyTable = function()
+{
+    global g_empty_table;
+    if ( !?g_empty_table ) { g_empty_table = table(); }
+    assert( tableCount( g_empty_table ) == 0 );
+    return g_empty_table;
+};

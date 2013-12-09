@@ -1,0 +1,115 @@
+local MakeTools = function()
+{
+	local Tools = 
+	{
+		globalsParams =
+		{
+			showGlobals = false,
+			showFunctions = false,
+		},
+	};
+
+	Tools.Update = function()
+	{
+		while( true )
+		{
+			if ( Input.DidKeyJustGoDown("F3") ) 
+			{
+				Console.Enable(!Console.IsEnabled());
+			}
+
+			RegisterGui( "Tools", .Gui, this );
+			yield();
+		}
+	};
+
+	Tools.GuiGlobals = function(tabArr)
+	{
+		.globalsParams.showFunctions = Gui.CheckBox( "Show Functions", .globalsParams.showFunctions );
+		Gui.Separator();
+		Gui.DisplayTable(globals(), tabArr, .globalsParams.showFunctions );
+	};
+
+	Tools.HandleGlobals = function()
+	{
+		fork
+		{
+			local numTabs = 16;
+			local tabArr = array(numTabs);
+			for( i = 0; i < numTabs; i+= 1 )
+			{
+				tabArr[i] = -1;
+			}
+
+			while( true )
+			{
+				if ( .globalsParams.showGlobals )
+				{
+					RegisterGui( "GM Globals", .GuiGlobals, this, tabArr );
+				}
+				yield();
+			}
+		}
+	};
+
+	Tools.Gui = function()
+	{
+		Gui.Minimize();
+
+		Gui.Print("Mouse: " + g_core.mousePos);
+		Gui.Print("Mouse Rel: " + g_core.mouseRelPos);
+
+		Gui.Header("Virtual Machine");
+
+		// show globals?
+		.globalsParams.showGlobals = Gui.CheckBox( "Show Globals (F4)", .globalsParams.showGlobals );
+		if ( Input.DidKeyJustGoDown("F4") )
+		{
+			.globalsParams.showGlobals = !.globalsParams.showGlobals;
+		}
+
+		// handle console
+		local isConsoleEnabled = Console.IsEnabled();
+		local enabledConsole = Gui.CheckBox( "Show Console (F3)", isConsoleEnabled );
+		if ( isConsoleEnabled != enabledConsole )
+		{
+			Console.Enable(enabledConsole);
+		}
+		
+
+		Gui.Header("Other");
+
+		// particle editor
+		if ( Gui.Button("Particle Editor") ) 
+		{ 
+			fork
+			{
+				Gui.Lock("Tools");
+				local particles = MakeParticles2d();
+				particles.RunGui(); 
+				while ( particles.showGui )
+				{
+					yield();
+				}
+				particles.Release();
+				Gui.Unlock("Tools");
+			}
+		}
+	};
+
+	Tools.Init = function()
+	{	
+		.threadId = this:thread(.Update);
+		.HandleGlobals();
+	};
+
+	Tools.Release = function()
+	{
+		threadKill(.threadId);
+	};
+
+	Tools.Init();
+	return Tools;
+};
+
+global g_tools = MakeTools();

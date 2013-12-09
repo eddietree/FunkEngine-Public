@@ -1,0 +1,71 @@
+local MakeFboStack = function()
+{
+	local max_num_fbos = 8;
+
+	local FboStack = 
+	{
+		max_num_fbos = max_num_fbos,
+
+		stack = array(max_num_fbos),
+		num_items = 0,
+	};
+
+	FboStack.GetTop = function()
+	{
+		if  ( .num_items > 0 )
+		{
+			return .stack[.num_items-1];
+		}
+
+		return null;
+	};
+
+	FboStack.Push = function(a_fbo)
+	{
+		assert( ?a_fbo );
+		assert( .num_items+1 <= .max_num_fbos );
+
+		// end whatever is on top
+		local top = .GetTop();
+		if ( ? top ) { top.End(); }
+
+		// push the fbo
+		.stack[.num_items] = a_fbo;
+		.num_items += 1;
+		a_fbo.Begin();
+	};
+
+	FboStack.Pop = function()
+	{
+		assert( .num_items > 0 );
+
+		// end the current one
+		local prev_top = .GetTop();
+		assert(prev_top.IsBound());
+		prev_top.End();
+
+		// pop the stack
+		.num_items -= 1;
+		.stack[.num_items] == null;
+
+		// return to the previous fbo
+		local curr_top = .GetTop();
+		if ( ?curr_top ) { curr_top.Begin(); }
+        else
+        {
+            // return the basic viewport
+            Gfx.Viewport( v2(0.0f), g_core.screenDimen );
+        }
+
+		return prev_top;
+	};
+
+	FboStack.Init = function()
+	{
+	};
+
+	return FboStack;
+};
+
+global g_fbo_stack = MakeFboStack();
+g_fbo_stack.Init();

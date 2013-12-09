@@ -1,0 +1,310 @@
+// Ease Graphs: http://sole.github.com/tween.js/examples/03_graphs.html
+// Src: https://github.com/sole/tween.js/blob/master/src/Tween.js
+
+global Ease = 
+{
+	Linear = function(t)
+	{
+		return t;
+	},
+
+	Elastic = 
+	{
+		Out = function(t)
+		{	
+			if (t==0.0f || t==1.0f) 
+			{
+				return t;
+			}
+
+			local amp = 1.0f;
+			local period = 0.3f;
+			
+			local pi2 = PI*2.0f;
+			local s = period/pi2*sin(1.0f/amp);
+			local result =  (amp*pow(2.0f,-10.0f*t)*sin((t-s)*pi2/period)+1.0f);
+
+			return result;
+		},
+
+		In = function(t)
+		{	
+			if (t==0.0f || t==1.0f) 
+			{
+				return t;
+			}
+
+			local amp = 1.0f;
+			local period = 0.3f;
+			
+			local pi2 = PI*2.0f;
+			local s = period/pi2*sin(1.0f/amp);
+
+			t-=1.0f;
+			local result =  -(amp*pow(2.0f,10.0f*t)*sin((t-s)*pi2/period));
+
+			return result;
+		},
+	},
+
+	Bounce = 
+	{
+		Out = function(t)
+		{	
+			if (t < (1/2.75)) 
+			{
+				return 7.5625f*t*t;
+			} 
+			else if (t < (2/2.75)) 
+			{
+				t-=(1.5f/2.75f);
+				return 7.5625f*t*t + .75f;
+			} 
+			else if (t < (2.5/2.75)) 
+			{
+				t-=(2.25f/2.75f);
+				return 7.5625f*t*t + .9375f;
+			} 
+			else 
+			{
+				t-=(2.625f/2.75f);
+				return 7.5625f*t*t + .984375f;
+			}
+
+			return t;
+		},
+	},
+
+	Back =
+	{
+		In = function(t)
+		{
+			local s = 1.70158f;
+			return (t*t*((s+1.0f)*t-s));
+		},
+
+		Out = function(t)
+		{
+			local s = 1.70158f;
+			t = t-1.0f;
+			return (t*t*((s+1.0f)*t+s)+1.0f);
+		},
+
+		InOut = function(t)
+		{
+			local s = 1.70158f * 1.525f;
+			t = t*2.0f;
+
+			if ( t < 1.0f )
+			{
+				return (0.5f * ( t * t * ( ( s + 1 ) * t - s ) ));
+			}
+
+			t -= 2.0f;
+			return (0.5f * ( t * t * ( ( s + 1 ) * t + s ) + 2.0f ));
+
+			return (t*t*((s+1.0f)*t+s)+1.0f);
+		},
+	},
+
+	Quadratic =
+	{
+		In = function(t)
+		{
+			return t*t;
+		},
+
+		Out = function(t)
+		{
+			t = 1.0f-t;
+			return 1.0f-t*t;
+		},
+
+		InOut = function(t)
+		{
+			return Ease.Pow.InOut(t,2.0f);
+		},
+	},
+
+	Cubic =
+	{
+		In = function(t)
+		{
+			return t*t*t;
+		},
+
+		Out = function(t)
+		{
+			t = 1.0f-t;
+			return 1.0f-t*t*t;
+		},
+
+		InOut = function(t)
+		{
+			return Ease.Pow.InOut(t, 3.0f);
+		},
+	},
+
+	Quartic =
+	{
+		In = function(t)
+		{
+			return t*t*t*t;
+		},
+
+		Out = function(t)
+		{
+			t = 1.0f-t;
+			return 1.0f-t*t*t*t;
+		},
+
+		InOut = function(t)
+		{
+			return Ease.Pow.InOut(t, 4.0f);
+		},
+	},
+
+	Quintic =
+	{
+		In = function(t)
+		{
+			return t*t*t*t*t;
+		},
+
+		Out = function(t)
+		{
+			t = 1.0f-t;
+			return 1.0f-t*t*t*t*t;
+		},
+
+		InOut = function(t)
+		{
+			return Ease.Pow.InOut(t, 5.0f);
+		},
+	},
+
+	Pow =
+	{
+		In = function(t, a_pow)
+		{
+			return pow(t,a_pow);
+		},
+
+		Out = function(t, a_pow)
+		{
+			return 1.0f-pow(1.0f-t,a_pow);
+		},
+
+		InOut = function(t, a_pow)
+		{
+			if ( t == 0.0f || t == 1.0f ) 
+			{
+				return t;
+			}
+			
+			t *= 2.0f;
+			if ( t < 1 ) 
+			{
+				return 0.5f * pow( 1024.0f, t - 1 );
+			}
+			return 0.5f * ( -pow( 2.0f, -10.0f * ( t-1.0f ) ) + 2.0f );
+		},
+	},
+
+	Circular =
+	{
+		In = function(t)
+		{
+			return 1.0f - sqrt( 1.0f - t*t );
+		},
+
+		Out = function(t)
+		{
+			t -= 1.0f;
+			return sqrt( 1 - t*t );
+		},
+
+		InOut = function(t)
+		{
+			t *= 2.0f;
+			if ( t < 1) 
+			{
+				return - 0.5f * ( sqrt( 1 - t*t) - 1.0f);
+			}
+
+			t -= 2.0f;
+			return 0.5f * sqrt( 1 - t*t ) + 1.0f;
+		},
+	},
+
+	Sinusoidal =
+	{
+		In = function(t)
+		{
+			return 1.0f - cos( t * PI*0.5f );
+		},
+
+		Out = function(t)
+		{
+			return sin( t * PI*0.5f );
+		},
+
+		InOut = function(t)
+		{
+			return 0.5f * ( 1.0f - cos(PI*t) );
+		},
+	},
+
+
+	/*    Eddie's Special Sauce Eases	*/
+
+	// goes from 0->1->0 again
+	Boomerang = function(t)
+	{
+		return sin(t*PI);
+	},
+
+	// goes from 0->1->0 again
+	BoomerangSmooth = function(t)
+	{
+		t = lerp( -PI*0.5f, PI*1.5f, t)*0.5f + 0.5f;
+		return sin(t);
+	},
+};
+
+/*
+// Testing the curve
+fork
+{
+	yield();
+
+	local drawfunc = function()
+	{
+		Imm.BeginDefaultShader();
+		Imm.BeginDraw();
+
+		Imm.Color(Gfx.BLACK);
+		Imm.PolygonBegin(Gfx.LINE_STRIP);
+
+		local num_steps = 64;
+		for( i = 0; i < num_steps; i+=1 )
+		{
+			local x = i.Float() / num_steps;
+			local y = Ease.Back.InOut(x);
+
+			Imm.Vertex2f(v2(x,y));
+		}
+
+		Imm.PolygonEnd();
+
+		Imm.EndDraw();
+		Imm.EndDefaultShader();
+	};
+
+	while(true)
+	{
+		RegisterDraw( DrawLayers.Scene, drawfunc );
+
+		yield();
+	}
+}*/

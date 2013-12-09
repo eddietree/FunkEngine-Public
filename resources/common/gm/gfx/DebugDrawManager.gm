@@ -1,0 +1,82 @@
+local CreateDebugDrawManager = function()
+{
+    local DebugDrawManager = table();
+
+    DebugDrawManager.Init = function()
+    {
+        .screen_lines = table();
+        .screen_circles = table();
+        .world_lines = table();
+        .world_circles = table();
+
+        .update_id = this:thread( .Update );
+    };
+
+    DebugDrawManager.Release = function()
+    {
+        threadKill( .update_id );
+    };
+
+    DebugDrawManager.DrawScreenLine = function( src, dst, color )
+    {
+        .screen_lines[] = { src = src, dst = dst, color = color };
+    };
+
+    DebugDrawManager.DrawWorldLine = function( src, dst, color )
+    {
+        .world_lines[] = { src = src, dst = dst, color = color };
+    };
+
+    DebugDrawManager.DrawWorld = function()
+    {
+        .DrawLines( .world_lines );
+    };
+
+    DebugDrawManager.DrawScreen = function()
+    {
+        .DrawLines( .screen_lines );
+    };
+
+    DebugDrawManager.DrawLines = function( lines )
+    {
+        Imm.BeginDefaultShader();
+        Imm.BeginDraw();
+
+        foreach ( line in lines )
+        {
+            local src = line.src;
+            local dst = line.dst;
+            local color = line.color;
+
+            if ( !?color ) { color = Gfx.RED; }
+
+    		Imm.Color( color, 1.0f );
+    		Imm.DrawLine( src, dst );
+        }
+
+        Imm.EndDraw();
+        Imm.EndDefaultShader();
+
+        tableClear( lines );
+    };
+
+    DebugDrawManager.Update = function()
+    {
+        while ( true )
+        {
+            RegisterDraw( DrawLayers.Scene_Debug, .DrawWorld, this );
+            RegisterDraw( DrawLayers.Screen_Debug, .DrawScreen, this );
+
+            yield();
+        }
+    };
+
+    return DebugDrawManager;
+};
+
+global g_debugDrawManager = CreateDebugDrawManager();
+g_debugDrawManager.Init();
+
+global DDSL = function( src, dst, color ) { return g_debugDrawManager.DrawScreenLine( src, dst, color ); };
+global DDWL = function( src, dst, color ) { return g_debugDrawManager.DrawWorldLine( src, dst, color ); };
+

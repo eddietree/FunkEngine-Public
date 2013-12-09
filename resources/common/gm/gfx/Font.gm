@@ -1,0 +1,45 @@
+global MakeFont = function(a_file, a_size)
+{
+	local Obj = {};
+	Obj.cpp = Font(a_file, a_size);
+	Obj.tex = Obj.cpp.GetTex();
+	Obj.shader = ShaderProgram("common/shaders/fontDefault.vp", "common/shaders/fontDefault.fp");
+
+	Obj.Init = function()
+	{
+		.threadId = null;
+	};
+
+	Obj.Print = function( a_str, a_pos, a_color, a_alpha )
+	{
+        if ( !?a_color ) { a_color = Gfx.WHITE; }
+        if ( !?a_alpha ) { a_alpha = 1.0f; }
+
+		.cpp.Begin();
+		
+		.shader.Begin();
+		.shader.UniformMVP("u_mvp");
+		.shader.UniformTex2d("u_tex", .tex );
+		.shader.Uniform4f("u_color", a_color.x, a_color.y, a_color.z, a_alpha );
+		
+		.cpp.Print(a_str, a_pos);
+		
+		.shader.End();
+		.cpp.End();
+	};
+
+	Obj.PrintCenterInRect = function( a_str, a_rect_pos, a_rect_dimen, a_color, a_alpha )
+	{
+		local text_dimen = .CalcDimen(a_str);
+		local text_pos = a_rect_pos + a_rect_dimen*0.5f + v2(-0.5f,0.5f) * text_dimen;
+
+		.Print( a_str, text_pos, a_color, a_alpha );
+	};
+
+	Obj.CalcDimen = function(a_text)
+	{
+		return .cpp.CalcDimen(a_text);
+	};
+	
+	return Obj;
+};

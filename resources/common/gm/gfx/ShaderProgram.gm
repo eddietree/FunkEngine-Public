@@ -1,0 +1,70 @@
+global UniformType =
+{
+	SAMPLER	= 0,
+	INT4	= 1,
+	FLOAT4	= 2,
+};
+
+global CreateShaderProgramFromFilename = function( a_vp_file, a_fp_file )
+{
+	return ShaderProgram( a_vp_file, a_fp_file );
+};
+
+global CreateShaderProgram = function( a_vp, a_fp )
+{
+	local ShaderProgram = {};
+	ShaderProgram.uniforms = {};	
+
+	ShaderProgram.Init = function( a_vp, a_fp )
+	{
+		assert(?a_vp);
+		assert(?a_fp);
+
+		.program = ShaderProgram();
+		.program.AttachVertexShader(a_vp);
+		.program.AttachFragShader(a_fp);
+		.program.Link();
+
+		// gather uniforms
+		.Begin();
+		.uniforms = .program.GetShaderUniforms();
+		.End();
+	};
+
+	ShaderProgram.Uniform = function( a_name, a_val0, a_val1, a_val2, a_val3 )
+	{	
+		local uniform = .uniforms[a_name];
+
+		if ( !?uniform ) 
+		{ 
+			//print("Uniform", a_name, " not active!"); 
+			return; 
+		}
+
+		if ( uniform.type == UniformType.SAMPLER )
+		{
+			.program.SetUniformInt( uniform.id, a_val0 );
+		}	
+		else if ( uniform.type == UniformType.INT4 )
+		{
+			.program.SetUniformInt4( uniform.id, a_val0, a_val1, a_val2, a_val3 );
+		}	
+		else if ( uniform.type == UniformType.FLOAT4 )
+		{
+			.program.SetUniformFloat4( uniform.id, a_val0, a_val1, a_val2, a_val3 );
+		}	
+	};
+
+	ShaderProgram.Begin = function()
+	{
+		.program.Begin();
+	};
+
+	ShaderProgram.End = function()
+	{
+		.program.End();
+	};
+
+	ShaderProgram.Init(a_vp, a_fp);
+	return ShaderProgram;
+};

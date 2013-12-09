@@ -1,0 +1,191 @@
+local CreateFader = function()
+{
+	local Fader = {};
+	Fader.threadId = null;
+
+	Fader.Init = function()
+	{
+		.threadId = null;
+	};
+
+	Fader.KillFade = function()
+	{
+		if ( ?.threadId )
+		{
+			if ( threadIsAlive(.threadId ))
+			{
+				threadKill(.threadId);
+			}
+			.threadId = null;
+		}
+	};
+
+	Fader.ClearOtherDrawCalls = function()
+	{
+		local draw_calls = g_drawManager.DrawCalls;
+
+		for( i = 0; i < draw_calls.Size(); i += 1 )
+		{			
+			if ( i == DrawLayers.ScreenFade )
+			{
+				continue;
+			}
+
+			draw_calls[i].Resize(0);
+		}
+	};
+
+	Fader.Flash = function( secondsIn, secondsOut, color, callbackFinishFunc = null, callbackObj = null, callbackArgs = null )
+	{
+		Log("Flash..");
+		assert( secondsIn >= 0.0f && secondsOut >= 0.0f && ?color );
+
+		.KillFade();
+
+		fork id
+		{
+			threadSetGroup( ThreadGroups.MAIN );
+
+			local data = 
+			{
+				fadeCoeff = 0.0f,
+				color = color
+			};
+
+			// Fade in
+			while( data.fadeCoeff < 1.0f)
+			{
+				data.fadeCoeff += g_dt	/ secondsIn;
+				RegisterDraw( DrawLayers.ScreenFade, .Draw, this, data );
+
+				yield();
+			}
+			data.fadeCoeff = 1.0f;
+
+			// Fade out
+			while( data.fadeCoeff > 0.0f)
+			{
+				data.fadeCoeff -= g_dt	/ secondsOut;
+				RegisterDraw( DrawLayers.ScreenFade, .Draw, this, data );
+
+				yield();
+			}
+
+			// callback object
+			if ( ?callbackFinishFunc )	{ callbackObj:callbackFinishFunc(callbackArgs); }
+
+			.KillFade();
+		};
+
+		
+		.threadId = id;
+	};
+
+	Fader.FadeIn = function( seconds, color, callbackFinishFunc = null, callbackObj = null, callbackArgs = null )
+	{
+		Log("Fade In..");
+
+		assert( seconds >= 0.0f && ?color );
+
+		.KillFade();
+
+		fork id
+		{
+			threadSetGroup( ThreadGroups.MAIN );
+
+			local data = 
+			{
+				fadeCoeff = 1.0f,
+				color = color
+			};
+
+			while( data.fadeCoeff >= 0.0f)
+			{
+				data.fadeCoeff -= g_dt	/ seconds;
+				RegisterDraw( DrawLayers.ScreenFade, .Draw, this, data );
+
+				yield();
+			}
+
+			// callback object
+			if ( ?callbackFinishFunc )	{ callbackObj:callbackFinishFunc(callbackArgs); }
+
+			.KillFade();
+		};
+
+		.threadId = id;
+	};
+
+	Fader.FadeOut = function( seconds, color, callbackFinishFunc = null, callbackObj = null, callbackArgs = null )
+	{
+		Log("Fade Out..");
+		assert( seconds >= 0.0f && ?color );
+
+		.KillFade();
+
+		fork id
+		{
+			threadSetGroup( ThreadGroups.MAIN );
+
+			local data = 
+			{
+				fadeCoeff = 0.0f,
+				color = color
+			};
+
+			while( data.fadeCoeff <= 1.0f)
+			{
+				data.fadeCoeff += g_dt	/ seconds;
+				RegisterDraw( DrawLayers.ScreenFade, .Draw, this, data );
+
+				yield();
+			}
+
+			// callback object
+			if ( ?callbackFinishFunc )	{ callbackObj:callbackFinishFunc(callbackArgs); 	}
+
+			// Register one more call or else the game will flicker one frame
+			RegisterDraw( DrawLayers.ScreenFade, .Draw, this, data );
+
+			.KillFade();
+		};
+
+		.threadId = id;
+	};
+
+	Fader.WaitOn = function()
+	{
+		while (?.threadId && threadIsAlive(.threadId))
+		{
+			yield();
+		}
+	};
+
+	Fader.Draw = function( data )
+	{
+		if ( data.fadeCoeff < 0.01f ) 
+		{
+			return;
+		}
+		
+		Gfx.Enable(Gfx.BLEND);
+
+		g_core.screenCam2d.Begin();		
+
+		Imm.BeginDefaultShader();
+		Imm.BeginDraw();
+
+		Imm.Color( saturate(data.color), saturate(data.fadeCoeff) );
+		Imm.DrawRect(v2(0), v2(g_core.screenDimen) );
+
+		Imm.EndDraw();
+		Imm.EndDefaultShader();
+
+		g_core.screenCam2d.End();
+	};
+
+	return Fader;
+};
+
+global g_fader = CreateFader();
+g_fader.Init();

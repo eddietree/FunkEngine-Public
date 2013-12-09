@@ -1,0 +1,75 @@
+local MakeGame = function()
+{
+	local Game = 
+	{
+		time = 0.0f
+	};
+
+	Game.Draw = function()
+	{
+		Imm.BeginDefaultShader();
+		Imm.BeginDraw();
+
+		Imm.Color( Gfx.RED, 1.0f );
+        Imm.DrawCircle( g_core.screenDimen*0.5, 80.0f );
+
+		Imm.EndDraw();
+		Imm.EndDefaultShader();
+
+		.font.PrintCenterInRect( "Konichiwa", v2(0.0f), g_core.screenDimen, Gfx.BLACK );
+	};
+	
+	Game.ClearScreen = function()
+	{
+		Gfx.ClearColor(v3(1.0f, 0.4f, 0.0f ));
+		Gfx.Clear( Gfx.COLOR_BUFFER_BIT | Gfx.DEPTH_BUFFER_BIT );
+	};
+
+	Game.DrawBegin = function()
+	{
+		.cam.Begin();
+	};
+
+	Game.DrawEnd = function()
+	{
+		.cam.End();
+	};
+
+	Game.Update = function()
+	{
+		while( true )
+		{
+			.cam.InitScreenSpace();
+
+			.time += g_dt;
+
+			RegisterDraw( DrawLayers.Scene_CamBegin, .DrawBegin, this );
+            RegisterDraw( DrawLayers.Scene_Debug, .DrawEnd, this );
+            RegisterDraw( DrawLayers.Scene, .Draw, this);
+			RegisterDraw( DrawLayers.Clear, .ClearScreen, this);
+			yield();
+		}
+	};
+
+	Game.Init = function()
+	{	
+		.cam = Cam2d();
+        .cam.InitScreenSpace();
+
+		system.DoFile("game/blank_game/gm/Includes.gm");
+
+		.font = MakeFont("common/textures/font/droid_10.png", 10 );
+
+		.threadId = this:thread(.Update);
+	};
+
+	Game.Release = function()
+	{
+		threadKill(.threadId);
+	};
+	
+	Game.Init();
+	return Game;
+};
+
+global g_game = MakeGame();

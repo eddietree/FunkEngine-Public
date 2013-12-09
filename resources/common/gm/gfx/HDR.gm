@@ -1,0 +1,455 @@
+global MakeHDR = function()
+{
+	local NUM_MIPMAPS = 4;
+
+	local HDR = 
+	{
+		params = {}, // set in ResetParams
+
+		num_blur_passes = 2,
+		blur_radius = 1.3f,
+
+		// main-buffer + mipmaps
+		mipmaps = array(NUM_MIPMAPS),
+
+		show_debug = false,
+		show_gui = true,
+		enable = true,
+	};
+
+	HDR.ResetParams = function()
+	{
+		.params.lumin_threshold_min = 0.7f;
+		.params.lumin_threshold_max = 1.5f;
+		.params.bloom_coeff = 1.6f;
+		.params.hdr_white_level = 1.0f;
+		.params.hdr_exposure = 1.0f;
+	};
+
+	HDR.Gui = function()
+	{
+        Gui.Minimize();
+
+		Gui.Print("Num Mip-Maps: " + .mipmaps.Size() );
+		Gui.Separator();
+		.show_debug = Gui.CheckBox("Show Debug MipMaps", .show_debug );
+		.enable = Gui.CheckBox("Enable HDR", .enable);
+
+		Gui.Header("Bloom");
+		.params.lumin_threshold_min = Gui.SliderFloat("Lumin Threshold Min", .params.lumin_threshold_min, 0.0f, 3.0f );
+		.params.lumin_threshold_max = Gui.SliderFloat("Lumin Threshold Max", .params.lumin_threshold_max, 0.0f, 3.0f );
+
+		.params.bloom_coeff = Gui.SliderFloat("Bloom Coeff", .params.bloom_coeff, 0.0f, 10.0f );
+		.blur_radius = Gui.SliderFloat("Blur Radius", .blur_radius, 0.0f, 3.0f );
+		.num_blur_passes = Gui.SliderInt("Blur Passes", .num_blur_passes, 0, 5 );
+
+		Gui.Header("HDR");
+		.params.hdr_exposure = Gui.SliderFloat("HDR Exposure", .params.hdr_exposure, 0.1f, 5.0f );
+		.params.hdr_white_level = Gui.SliderFloat("HDR White Level", .params.hdr_white_level, 0.1f, 5.0f );
+	};
+
+	HDR.InitFullscreenVbo = function()
+	{
+		g_vbo_builder.Clear();
+		g_vbo_builder.DrawRectTexCoords( v2(-1.0f), v2(2.0f), v2(0.0f), v2(1.0f) );
+		.vbo_fullscreen = g_vbo_builder.CreateVbo();
+	};
+
+	HDR.InitShaders = function()
+	{
+		Log("HDR.InitShaders()");
+
+		.shaders = MakeShaderBank();
+
+		.shaders.Add( "copy", "common/shaders/hdr/hdr.vp", "common/shaders/hdr/hdr_copy.fp" );
+		.shaders.Add( "blur", "common/shaders/hdr/hdr.vp", "common/shaders/hdr/hdr_blur.fp" );
+		.shaders.Add( "threshold", "common/shaders/hdr/hdr.vp", "common/shaders/hdr/hdr_threshold.fp" );
+		.shaders.Add( "final", "common/shaders/hdr/hdr.vp", "common/shaders/hdr/hdr_final.fp" );
+	};
+
+	HDR.InitFbos = function()
+	{
+		local screen_dimen = g_core.screenDimen;
+		Log( "HDR.InitFbos() - Initializing HDR FBOs of size " + screen_dimen );
+
+		// hdr format
+		local hdr_tex_internal_format = Gfx.TEXTURE_FORMAT_INTERNAL_RGBA16F;
+		local hdr_data_format = Gfx.DATATYPE_HALF_FLOAT;
+		local hdr_tex_format = Gfx.TEXTURE_FORMAT_RGBA;
+
+		// mipmap format
+		//local mip_tex_internal_format = Gfx.TEXTURE_FORMAT_INTERNAL_RGBA8;
+		//local mip_data_format = Gfx.DATATYPE_UNSIGNED_BYTE;
+		local mip_tex_internal_format = Gfx.TEXTURE_FORMAT_INTERNAL_RGBA16F;
+		local mip_data_format = Gfx.DATATYPE_HALF_FLOAT;
+		local mip_tex_format = Gfx.TEXTURE_FORMAT_RGBA;
+
+		// create the fbo
+		Log( "\Creating Fbo!" );
+		.fbo = Fbo( screen_dimen.x, screen_dimen.y );
+		Log( "\Generating Depth buffer..." );
+		.fbo.GenerateDepthBuffer();
+		Log( "\Validating FBO.." );
+		.fbo.Validate();
+
+		Log( "\tFbo created!" );
+
+		// generate main buffer
+		Log( "\tCreating main HDR fbo buffer" );
+		.main_buffer_tex = Texture2d( screen_dimen.x, screen_dimen.y, hdr_tex_internal_format, hdr_tex_format, hdr_data_format );
+		Log( "\tHDR buffer created!");
+
+		Log( "\tCreating HDR mipmaps.." );
+        
+        local dimen_base_x = max(screen_dimen.x.Int(), 512);
+        local dimen_base_y = max(screen_dimen.y.Int(), 512);
+
+		// smaller mipmaps
+		for ( i = 0; i < .mipmaps.Size(); i+= 1)
+		{
+			local tex_size_x = dimen_base_x >> (i*2+1);
+			local tex_size_y = dimen_base_y >> (i*2+1);
+
+			local mip_table = 
+			{
+				Texture2d( tex_size_x, tex_size_y, mip_tex_internal_format, mip_tex_format, mip_data_format ),
+				Texture2d( tex_size_x, tex_size_y, mip_tex_internal_format, mip_tex_format, mip_data_format ),
+			};
+			
+			.mipmaps[i] = mip_table;
+		}
+
+		Log( "HDR.InitFbos() - HDR FBO creation complete!" );
+	};
+
+	HDR.MaybeResize = function()
+	{
+		// if hdr size changes, change depth bbufer
+		// and main_buffers
+		if ( g_core.screenDimen != .fbo.GetDimenf() )
+		{
+			.fbo = null;
+
+			Log("Resizing Fbo to: "  + g_core.screenDimen );
+			.InitFbos();
+		}
+	};
+	
+	HDR.Init = function()
+	{
+		.ResetParams();
+		.InitFbos();
+		.InitFullscreenVbo();
+		.InitShaders();
+
+		fork id
+		{
+			while(true)
+			{
+				RegisterGui( "HDR", .Gui, this );
+
+				if ( .enable )
+				{
+					.MaybeResize();
+					RegisterDraw( DrawLayers.Offscreen_Begin, .BeginDraw, this );
+					RegisterDraw( DrawLayers.Offscreen_End, .EndDraw, this );
+				}
+
+				yield();
+			}
+		}
+
+		.threadId = id;
+	};
+
+	HDR._PushFbo = function( a_tex, a_set_viewport )
+	{
+		assert( !.fbo.IsBound() );
+        
+        if ( !?a_set_viewport )
+        {
+            a_set_viewport = true;
+        }
+		
+		.fbo.Begin(false);
+        .fbo.SetRenderTargetTexNoBind( a_tex, 0 );
+
+        if ( a_set_viewport )
+        {
+            local size = a_tex.Sizef();
+            Gfx.Viewport( 0, 0, size.x, size.y );
+        }
+	};
+
+	HDR._PopFbo = function()
+	{
+		assert( .fbo.IsBound() );
+		.fbo.End();
+	};
+
+	HDR._BlurTex = function( a_shader, a_tex, a_tex_helper, a_num_passes)
+	{
+		local tex_src = a_tex;
+		local tex_dst = a_tex_helper;
+
+		// size
+		local tex_size = a_tex.Sizef();
+		local delta_u = .blur_radius / tex_size.x;
+		local delta_v = .blur_radius / tex_size.y;
+        
+        Gfx.Viewport( 0, 0, tex_size.x, tex_size.y );
+
+		for( i = 0; i < a_num_passes; i+=1 )
+		{
+			// blur vert
+			._PushFbo(tex_dst, false);
+				tex_src.Bind();
+				a_shader.UniformTex2d("u_tex", tex_src);
+				a_shader.Uniform2f( "u_uv_delta", 0.0f, delta_v );
+				._DrawFullscreenRect();
+				tex_src.Unbind();
+			._PopFbo();
+
+			// blur horiz
+			._PushFbo(tex_src, false);
+				tex_dst.Bind();
+				a_shader.UniformTex2d("u_tex", tex_dst);
+				a_shader.Uniform2f( "u_uv_delta", delta_u, 0.0f );
+				._DrawFullscreenRect();
+				tex_dst.Unbind();
+			._PopFbo();
+		}
+	};
+
+	HDR._CopyTex = function(a_tex_src, a_tex_dst)
+	{
+		._PushFbo(a_tex_dst);
+
+		a_tex_src.Bind();
+
+		// draw the copy
+		local shader = .shaders.Get("copy");
+		shader.Begin();
+		shader.UniformTex2d("u_tex", a_tex_src);
+		._DrawFullscreenRect();
+		shader.End();
+
+		a_tex_src.Unbind();
+
+		._PopFbo();
+	};
+
+	HDR._ThresholdTex = function( a_tex_src, a_tex_dst )
+	{
+		._PushFbo(a_tex_dst);
+
+		a_tex_src.Bind();
+
+		// draw the copy
+		local shader = .shaders.Get("threshold");
+		shader.Begin();
+		shader.UniformTex2d("u_tex", a_tex_src);
+		shader.Uniform2f("u_thresholds", .params.lumin_threshold_min, .params.lumin_threshold_max);
+
+		._DrawFullscreenRect();
+		shader.End();
+
+		a_tex_src.Unbind();
+
+		._PopFbo();
+	};
+
+	HDR._DrawFullscreenRect = function()
+	{
+		.vbo_fullscreen.Draw(Gfx.TRIANGLES);
+	};
+
+	HDR.BeginDraw = function()
+	{
+		local main_buffer_tex = .main_buffer_tex;
+
+		.fbo.SetRenderTargetTex( main_buffer_tex, 0 );
+		g_fbo_stack.Push(.fbo);
+
+		Gfx.ClearColor( v3(0), 1.0f );
+		Gfx.Clear( Gfx.COLOR_BUFFER_BIT | Gfx.DEPTH_BUFFER_BIT );
+
+		Gfx.Enable(Gfx.LINE_SMOOTH);
+	};
+	
+	HDR.EndDraw = function()
+	{
+		g_fbo_stack.Pop();
+		.DrawHDR();
+	};
+
+	HDR.DrawBlur = function()
+	{
+		local shader = .shaders.Get("blur");
+		shader.Begin();
+
+		for( i = 0; i < .mipmaps.Size(); i+=1 )
+		{
+			local mipmap = .mipmaps[i];
+			local tex_dst = mipmap[0];
+			local tex_helper = mipmap[1];
+
+			._BlurTex( shader, tex_dst, tex_helper, .num_blur_passes );
+		}
+
+		shader.End();
+	};
+
+	HDR.DrawMipMaps = function()
+	{
+		local shader = .shaders.Get("copy");
+		shader.Begin();
+
+		for( i = 1; i < .mipmaps.Size(); i+=1 )
+		{
+			local tex_src = .mipmaps[i-1][0];
+			local tex_dst = .mipmaps[i][0];
+
+			._PushFbo(tex_dst);
+			
+			tex_src.Bind();
+			shader.UniformTex2d("u_tex", tex_src);
+
+			._DrawFullscreenRect();
+
+			tex_src.Unbind();
+			._PopFbo();
+
+			tex_src = tex_dst;
+		}
+
+		shader.End();
+	};
+
+	HDR.DrawThreshold = function()
+	{
+		local tex_src = .main_buffer_tex;
+		local tex_dst = .mipmaps[0][0];
+
+		._ThresholdTex( tex_src, tex_dst );
+	};
+
+	HDR.DrawFinal = function()
+	{
+		local shader = .shaders.Get("final");
+		shader.Begin();
+
+		local blur_tex_0 = .mipmaps[0][0];
+		local blur_tex_1 = .mipmaps[1][0];
+		local blur_tex_2 = .mipmaps[2][0];
+		local blur_tex_3 = .mipmaps[3][0];
+
+		.main_buffer_tex.Bind(0);
+		blur_tex_0.Bind(1);
+		blur_tex_1.Bind(2);
+		blur_tex_2.Bind(3);
+		blur_tex_3.Bind(4);
+
+		shader.Uniform1f("u_bloom_coeff", .params.bloom_coeff );
+		shader.UniformTex2d("u_tex", .main_buffer_tex);
+		shader.UniformTex2d("u_tex_blur_0", blur_tex_0);
+		shader.UniformTex2d("u_tex_blur_1", blur_tex_1);
+		shader.UniformTex2d("u_tex_blur_2", blur_tex_2);
+		shader.UniformTex2d("u_tex_blur_3", blur_tex_3);
+
+		._DrawFullscreenRect();
+
+		.main_buffer_tex.Unbind();
+		blur_tex_0.Unbind();
+		blur_tex_1.Unbind();
+		blur_tex_2.Unbind();
+		blur_tex_3.Unbind();
+
+		shader.End();
+	};
+
+	HDR.DrawRaw = function()
+	{
+		local tex_src = .main_buffer_tex;
+
+		tex_src.Bind();
+
+		// draw the copy
+		local shader = .shaders.Get("copy");
+		shader.Begin();
+		shader.UniformTex2d("u_tex", tex_src);
+		._DrawFullscreenRect();
+		shader.End();
+
+		tex_src.Unbind();
+	};
+
+	HDR.DrawDebug = function()
+	{
+		// draw mipmaps
+		Imm.BeginDraw();
+		local shader = .shaders.Get("copy");
+		shader.Begin();
+
+		for( i = 0; i < .mipmaps.Size(); i+=1 )
+		{
+			local mipmap = .mipmaps[i];
+			local tex_src = mipmap[1];
+			tex_src.Bind();
+
+			shader.UniformTex2d("u_tex", tex_src);
+
+			// draw
+			local delta_y = 2.0 / .mipmaps.Size();
+			local y = -1.0f + delta_y *i;
+			Imm.DrawRectTexCoords( v2(-1.0f, y), v2(delta_y), v2(0.0f), v2(1.0f) );
+
+			tex_src.Unbind();
+		}
+
+		shader.End();
+		Imm.EndDraw();
+	};
+
+	HDR.DrawHDR = function()
+	{
+		Gfx.Disable(Gfx.DEPTH_TEST);
+		Gfx.Disable(Gfx.BLEND);
+
+		.vbo_fullscreen.Begin();
+
+		.DrawThreshold();
+		.DrawMipMaps();
+		.DrawBlur();
+        
+         Gfx.Viewport( v2(0.0f), g_core.screenDimen );
+		.DrawFinal();
+
+		
+
+		// debugging
+		if ( .show_debug )
+		{
+             Gfx.Viewport( 0, 0, g_core.screenDimen.x, g_core.screenDimen.y );
+             
+			//.DrawRaw();
+			.DrawDebug();
+			//Gfx.Viewport( 0, 0, g_core.screenDimen.x, g_core.screenDimen.y );
+		}
+
+		.vbo_fullscreen.End();
+
+		Gfx.Enable(Gfx.BLEND);
+	};
+
+	HDR.Release = function()
+	{
+		.shaders.Release();
+		.shaders = null;
+
+		threadKill(.threadId);
+	};
+
+	HDR.Init();	
+	return HDR;
+};

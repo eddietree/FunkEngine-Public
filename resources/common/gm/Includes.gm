@@ -1,0 +1,44 @@
+
+// gfx
+system.DoFile("common/gm/gfx/ShaderProgram.gm");
+system.DoFile("common/gm/gfx/ShaderBank.gm");
+system.DoFile("common/gm/gfx/Gfx.gm");
+system.DoFile("common/gm/gfx/MVP.gm");
+system.DoFile("common/gm/gfx/DrawManager.gm");
+system.DoFile("common/gm/gfx/DebugDrawManager.gm");
+system.DoFile("common/gm/gfx/Font.gm");
+system.DoFile("common/gm/gfx/Fader.gm");
+system.DoFile("common/gm/gfx/FboStack.gm");
+system.DoFile("common/gm/gfx/SplashScreen.gm");
+system.DoFile("common/gm/gfx/HDR.gm");
+//system.DoFile("common/gm/gfx/Particles2d.gm");
+
+// audio
+system.DoFile("common/gm/audio/FmodStudioBank.gm");
+system.DoFile("common/gm/audio/SoundBank.gm");
+
+// tween
+system.DoFile("common/gm/tween/Tween.gm");
+system.DoFile("common/gm/tween/TweenTimeline.gm");
+system.DoFile("common/gm/tween/TweenTask.gm");
+
+// util
+system.DoFile("common/gm/util/Ease.gm");
+system.DoFile("common/gm/util/State.gm");
+system.DoFile("common/gm/util/StateMachine.gm");
+system.DoFile("common/gm/util/Util.gm");
+system.DoFile("common/gm/util/Imgui.gm");
+system.DoFile("common/gm/util/ImguiHelper.gm");
+//if ( g_debug ) { system.DoFile("common/gm/util/Tools.gm"); }
+
+system.DoFile("common/gm/debug/Debug.gm");
+
+// hardware
+system.DoFile("common/gm/hardware/LeapManager.gm");
+system.DoFile("common/gm/hardware/LeapHelpers.gm");
+system.DoFile("common/gm/hardware/TouchInputManager.gm");
+
+
+// root
+system.DoFile("common/gm/ThreadGroups.gm");
+system.DoFile("common/gm/Constants.gm");

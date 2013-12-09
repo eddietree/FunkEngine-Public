@@ -1,0 +1,91 @@
+global LeapHelper = 
+{
+	// params: pass a table, (option) y-up vector
+	// returns: true of available
+	// a_table gets filled with {x, y, z} axis slots
+	GetBasisRotationOneHand = function( a_table, a_y_up  )
+	{
+		local frame = g_leap.GetFrame();
+		
+		// no hands
+		if ( tableCount(frame.hands) == 0  || tableCount(frame.fingers) == 0  ) { return false; }
+
+		// grab first hand
+		local hand = tableFirst(frame.hands);
+		
+		local axis_y = -hand.palm_normal;
+		local axis_z = normalize( -hand.dir );
+		local axis_x = normalize( cross(axis_y, axis_z) );
+
+		if ( ?a_y_up )
+		{
+			axis_x = normalize( cross(a_y_up, axis_z) );
+			axis_y = normalize( cross(axis_z, axis_x) );
+			axis_z = normalize( cross(axis_x, axis_y) );
+		}
+
+		a_table.x = axis_x;
+		a_table.y = axis_y;
+		a_table.z = axis_z;
+
+		return true;
+	},
+	
+	GetBasisRotationTwoHands = function( a_table, a_y_up )
+	{
+		local frame = g_leap.GetFrame();
+		
+		// no hands
+		if ( tableCount(frame.hands) < 2  || tableCount(frame.fingers) == 0  ) { return false; }
+
+		local hand_0 = tableAtIndex(frame.hands, 0);
+		local hand_1 = tableAtIndex(frame.hands, 1);
+
+		// maybe use different metric other than x-pos?
+		// maybe can depend on rotation etc
+
+		local hand_left = select( hand_0.palm_pos.x < hand_1.palm_pos.x, hand_0, hand_1 );
+		local hand_right = select( hand_left == hand_0, hand_1, hand_0 );
+
+		local axis_x = normalize(hand_right.palm_pos - hand_left.palm_pos);
+		local axis_y = -normalize( hand_right.palm_normal + hand_left.palm_normal );
+		local axis_z = normalize( cross(axis_x, axis_y) );
+		axis_y = normalize( cross(axis_z, axis_x) );
+
+		if ( ?a_y_up )
+		{
+			axis_x = normalize( cross(a_y_up, axis_z) );
+			axis_y = normalize( cross(axis_z, axis_x) );
+			axis_z = normalize( cross(axis_x, axis_y) );
+		}
+
+		a_table.x = axis_x;
+		a_table.y = axis_y;
+		a_table.z = axis_z;
+
+		return true;
+	},
+
+	IsGripping = function( a_hand )
+	{
+		if ( tableCount(a_hand.fingers) == 0 ) 
+		{ 
+			return true; 
+		}
+
+		// test to see if just thumb
+		if ( tableCount(a_hand.fingers) == 1 )
+		{
+			local finger = tableFirst(a_hand.fingers);
+			local vec_palm_to_finger = normalize(finger.tip_pos - a_hand.palm_pos);
+
+			// if the one finger is a thumb, then the directios should be pointing away
+			if ( dot(vec_palm_to_finger, a_hand.palm_normal) < 0.7f ) 
+			{
+				return true;
+			}
+		}
+
+		return false;
+	},
+};

@@ -1,0 +1,102 @@
+global TouchEvent =
+{
+	BEGIN		= 0,
+	MOVE		= 1,
+	STATIONARY	= 2,
+	END			= 3,
+	CANCEL		= 4,
+};
+
+global TouchLayer =
+{
+	HUD		= 0,
+	SCENE	= 1,
+	BG		= 2,
+};
+
+local CreateTouchInputManager = function()
+{
+	local TouchInputManager =
+	{
+		draw_debug = false,
+		touches = {},
+	};
+
+	TouchInputManager.GetTouch = function( a_id )
+	{
+		return .touches[a_id];
+	};
+	
+	TouchInputManager.OnEventTouchBegin = function( touch )
+	{
+		.touches[touch.id] = touch;
+		//print("BEGIN:" + tableCount(.touches));
+	};
+	
+	TouchInputManager.OnEventTouchEnd = function( touch )
+	{
+		// remove
+		.touches[touch.id] = null;
+	};
+	
+	TouchInputManager.OnEventTouchMove = function( touch )
+	{
+		//print("MOVE:");
+	};
+	
+	TouchInputManager.OnEventTouchCancel = function( touch )
+	{
+		//print("CANCEL:");
+		// remove
+		.touches[touch.id] = null;
+	};
+
+	TouchInputManager.Init = function()
+	{
+		fork id
+		{
+			while(true)
+			{
+				if ( g_debug && .draw_debug )
+				{
+					RegisterDraw( DrawLayers.Debug, .DrawDebug, this );
+				}
+				
+				yield();
+			}
+		}
+	};
+	
+	TouchInputManager.DrawDebug = function()
+	{
+		local cam = g_core.screenCam2d;
+		
+		cam.Begin();
+		
+		Imm.BeginDefaultShader();
+		Imm.BeginDraw();
+		Imm.Color( Gfx.BLUE );
+		
+		foreach( touch in .touches )
+		{
+			local radius = 40.0f;
+
+			Imm.DrawCircleWire( touch.pos_start, radius*0.25f );
+			Imm.DrawLine( touch.pos_start, touch.pos );			
+			Imm.DrawRectWire( touch.pos - v2(radius*0.2f), v2(radius*0.4f) );
+			Imm.DrawCircleWire( touch.pos, radius );
+		}
+		
+		Imm.EndDraw();
+		Imm.EndDefaultShader();
+		
+		cam.End();
+		
+		TouchInput.DrawDebug();
+	};
+
+	TouchInputManager.Init();
+	return TouchInputManager;
+};
+
+global g_touchInput = CreateTouchInputManager();

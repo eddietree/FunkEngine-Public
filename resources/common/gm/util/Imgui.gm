@@ -1,0 +1,149 @@
+global RegisterGui = function
+( 
+	a_window_title, // Title of window
+	a_func, // pointer to function of window calls 
+	a_obj, // the "this" object 
+	a_func_arg = null, // argument passed into the func
+	a_window_dimen = null, // window dimension, auto-resize if null
+	a_window_pos = null  // window position, auto-pos if null
+) {
+	if ( g_debug && g_config_show_debug_gui && !g_config_is_mobile )
+	{
+		assert(?a_window_title && typeId(a_window_title)==g_type_id.string );
+
+		local callback = g_imgui_mngr.AllocCallback();
+		
+		// populate callback
+		callback.window_title = a_window_title;
+		callback.window_dimen = a_window_dimen;
+		callback.window_pos = a_window_pos;
+		callback.func = a_func;
+		callback.func_arg = a_func_arg;
+		callback.obj = a_obj;
+		callback.order_index = -1;
+
+		// register
+		g_imgui_mngr.RegisterCallBack( a_window_title, callback );
+	}
+};
+
+local MakeImguiManager = function()
+{
+	local ImguiManager = {};
+
+// TODO: nullify the array each time
+	ImguiManager.callbacks_ordered = {};
+
+	ImguiManager.callbacks = {};
+	ImguiManager.callbacks_cache = {};
+
+	ImguiManager.RegisterCallBack = function( a_window_title, a_callback )
+	{
+		assert(?a_callback);
+		.callbacks[a_callback] = a_callback;
+	};
+
+	ImguiManager.Clear = function()
+	{
+		// move all the callbacks into cache
+		foreach( callback in .callbacks )
+		{
+			.callbacks_cache[callback] = callback;
+			tableClear(callback);
+		}
+
+		tableClear(.callbacks_ordered);
+		tableClear(.callbacks);
+	};
+
+	ImguiManager._SortCallbacks = function()
+	{
+		local num_callbacks = tableCount(.callbacks);
+
+		// push all callbacks into a list, -1 index will become end of list
+		foreach( callback in .callbacks )
+		{
+			local order_index = Gui.GetWindowOrderIndex( callback.window_title );
+			callback.order_index = select( order_index == -1, num_callbacks, order_index );
+			.callbacks_ordered[] = callback;
+		}
+
+		// sort
+		for( i = 0; i < num_callbacks-1; i+=1 )
+		{
+			for( j = i; j < num_callbacks; j+=1 )
+			{
+				if ( .callbacks_ordered[i].order_index > .callbacks_ordered[j].order_index )
+				{
+					local temp = .callbacks_ordered[j];
+					.callbacks_ordered[j] = .callbacks_ordered[i];
+					.callbacks_ordered[i] = temp;
+				}
+			}
+		}
+	};
+
+	ImguiManager.Draw = function()
+	{
+		._SortCallbacks();
+
+		// set rendering to true for imgui
+		global g_rendering;
+		g_rendering = true;
+
+		// render the guis - back to front
+		local num_callbacks = tableCount(.callbacks_ordered);
+		for ( i = num_callbacks-1; i>=0; i-=1 )
+		{
+			local callback = .callbacks_ordered[i];
+			//print( "..[" + i + "]: " + callback.window_title);
+
+			local obj = callback.obj;
+			local func = callback.func;
+			local arg = callback.func_arg;
+
+			Gui.Begin(callback.window_title, callback.window_pos, callback.window_dimen);
+			
+			// render contents if not minimized
+			if ( !Gui.IsMinimized() )
+			{
+				obj:func(arg);
+			}
+
+			Gui.End();
+		}
+
+		g_rendering = false;
+		
+		.Clear();
+	};
+
+	ImguiManager.AllocCallback = function()
+	{
+		// first, try to alloc from cache
+		if ( tableCount(.callbacks_cache) > 0 )
+		{
+			local callback = tableFirst(.callbacks_cache);
+			.callbacks_cache[callback] = null;
+
+			return callback;
+		}
+
+		// if no items available in cache, create new table
+		return table();
+	};
+
+	ImguiManager._Init = function()
+	{
+
+	};
+	
+	ImguiManager.Release = function()
+	{
+	};
+
+	ImguiManager._Init();
+	return ImguiManager;
+};
+
+global g_imgui_mngr = MakeImguiManager();

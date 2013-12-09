@@ -1,0 +1,9 @@
+//
+// Prefix header for all source files of the 'FunkEngine-MacOSX' target in the 'FunkEngine-MacOSX' project
+//
+
+#ifdef __OBJC__
+	#import <Cocoa/Cocoa.h>
+#endif
+
+#include <config/UserConfig.h>

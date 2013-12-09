@@ -1,0 +1,85 @@
+global CreateSplashScreen = function()
+{
+	local SplashScreen = {};
+
+	SplashScreen.DrawClearScreen = function()
+	{
+		// clear screen
+		Gfx.ClearColor( v3(0.99f), 1.0f );
+		Gfx.ClearDepth(1.0);
+		Gfx.Clear( Gfx.COLOR_BUFFER_BIT | Gfx.DEPTH_BUFFER_BIT );
+	};
+
+	SplashScreen.Draw = function( alpha )
+	{
+		g_core.screenCam2d.Begin();
+
+		Imm.BeginDraw();
+		Imm.BeginDefaultTexShader();
+		Gfx.Enable(Gfx.BLEND);
+		Gfx.SetBlendFunc( Gfx.SRC_ALPHA, Gfx.ONE_MINUS_SRC_ALPHA);
+
+		// pos
+		local dimen = .tex.Sizef();
+		local pos = g_core.screenDimen * 0.5f - dimen * 0.5f;
+
+		// draw it!
+		Imm.Color(v3(1.0f), alpha);
+		Imm.Texture(.tex);
+		Imm.DrawRectTexCoords( pos, dimen  );
+
+		Imm.EndDefaultTexShader();
+		Imm.EndDraw();
+
+		g_core.screenCam2d.End();
+	};
+
+	SplashScreen.Go = function()
+	{
+		.tex = Texture2d("common/textures/splash.png");		
+
+		fork id
+		{
+			local time = 0.0f;
+			local timeMax = 3.5f;
+			local keypress_jump_to_time = timeMax*0.75f;
+
+			Log("Start Splash Screen");
+
+			Window.ShowMouseCursor(false);
+
+			while(true)
+			{
+				// fast-forward
+				if( ( Input.DidKeyJustGoDown("ESCAPE") 
+					|| Input.DidKeyJustGoDown("RETURN") 
+					|| Input.DidKeyJustGoDown("SPACE") ) 
+					&& time < keypress_jump_to_time )
+				{
+					time = keypress_jump_to_time;
+				}
+
+				local alpha = clamp( 2.0f*cubicPulse( timeMax*0.5f, timeMax*0.5f, time ), 0.0f, 1.0f );
+
+				RegisterDraw( DrawLayers.Clear, .DrawClearScreen, this );
+				RegisterDraw( DrawLayers.Scene, .Draw, this, alpha );
+				time += g_dt;
+
+				if ( time > timeMax ) { break; }
+
+				yield();
+			}
+
+			Window.ShowMouseCursor(g_debug);
+
+			Log("End Splash Screen");
+		}
+
+		while(threadIsAlive(id))
+		{
+			yield();
+		}
+	};
+
+	return SplashScreen;
+};

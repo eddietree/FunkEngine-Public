@@ -1,0 +1,311 @@
+global TextInputBox = function( title, textInputCaption, defaultText )
+{
+	if ( !?title ) { title = "UNTITLED"; }
+	if ( !?textInputCaption ) { textInputCaption = "Name"; }
+	if ( !?defaultText ) { defaultText = ""; }
+
+	local params =
+	{
+		title = title,
+		textInputCaption = textInputCaption,
+		finished = false,
+		result = defaultText
+	};
+
+	local DrawGui = function(params)
+	{
+		params.result = Gui.TextInput( params.textInputCaption, params.result );
+
+		if ( Gui.Button("OK") || (Gui.IsWindowActive() && Input.DidKeyJustGoDown("RETURN")) )
+		{
+			params.finished = true;
+
+			if ( params.result == "" ) 
+			{
+				params.result = null;
+				params.finished = true;
+			}
+		}
+		Gui.SameLine();
+		if ( Gui.Button("Cancel") )
+		{
+			params.finished = true;
+			params.result = null;
+		}
+	};
+
+	while(!params.finished)
+	{
+		RegisterGui( params.title, DrawGui, null, params );
+		yield();
+	}
+
+	return params.result;
+};
+
+global FileChooser = function( title, directory, description_func, description_data ) 
+{
+	assert( title && directory );
+
+	local params =
+	{
+		title = title,
+		finished = false,
+		directory = directory,
+		result = null,
+        description_func = description_func,
+        description_data = description_data,
+	};
+
+	local DrawGui = function(params)
+	{
+		Gui.Print("Directory: " + params.directory);
+		Gui.Separator();
+		local file = system.FileFindFirst(params.directory + "*.*" );
+
+		while ( file )
+		{
+			local filename = file.filename;
+			file = system.FileFindNext(file);
+
+			// ignore weird files
+			if  ( filename == ".svn" || filename == "." || filename == ".." )
+			{
+				continue;
+			}
+
+			if ( Gui.Button(filename) )
+			{
+				params.result = filename;
+				params.finished = true;
+				break;
+			}
+
+            if ( ?params.description_func && ?params.description_data )
+            {
+                if ( !?params.description_data[ filename ] )
+                {
+                    params.description_data[ filename ] = params.description_func( filename );
+                }
+
+                Gui.SameLine();
+                Gui.Print( params.description_data[ filename ] );
+            }
+		}
+
+		Gui.Separator();
+		
+		if ( Gui.Button("Cancel") )
+		{
+			params.result = null;
+			params.finished = true;
+		}
+	};
+
+	while(!params.finished)
+	{
+		RegisterGui( params.title, DrawGui, null, params );
+		yield();
+	}
+
+	return params.result;
+};
+
+global OpenImageChooser = function(title, directory, file_extension /* "png" */)
+{
+	assert( title && directory );
+
+	local params =
+	{
+		title = title,
+		finished = false,
+		directory = directory,
+		file_extension = file_extension,
+		result = null,
+		textures = {},
+	};
+
+	local LoadTextures = function( params )
+	{
+		local search_string = params.directory + "*." + params.file_extension;
+		print(search_string);
+		local file = system.FileFindFirst( search_string );
+
+		while ( file )
+		{
+			local filename = file.filename;
+			file = system.FileFindNext(file);
+			
+			local full_path = params.directory + filename;
+			local texture = Texture2d(full_path);
+
+			assert(?texture);
+
+			local tex_data =
+			{
+				tex = texture,
+				filename = filename,
+				full_path = full_path,
+			};
+
+			params.textures[filename] = tex_data;
+		}
+	};
+
+	LoadTextures(params);
+
+	local DrawGui = function(params)
+	{
+		Gui.Print("Directory: " + params.directory);
+		Gui.Separator();
+
+		foreach( filename and tex_data in params.textures )
+		{
+			local tex_dimen = tex_data.tex.Sizef();
+			local tex_display_width = 128.0f;
+			local tex_display_height = tex_display_width * tex_dimen.y / tex_dimen.x;
+			local tex_display_dimen = v2(tex_display_width, tex_display_height);
+
+			Gui.Print( filename );
+			if ( Gui.ImageButton( tex_data.tex, v2i(tex_display_dimen), v2(0.0f, 1.0f), v2(1.0f, 0.0f) ) )
+			{
+				params.result = filename;
+				params.finished = true;
+				break;
+			}
+
+			Gui.Print("");
+		}
+
+		Gui.Separator();
+		
+		if ( Gui.Button("Cancel") )
+		{
+			params.result = null;
+			params.finished = true;
+		}
+	};
+
+	while(!params.finished)
+	{
+		RegisterGui( params.title, DrawGui, null, params );
+		yield();
+	}
+
+	return params.result;
+};
+
+
+global TableKeyChooser = function(title, a_table)
+{
+	assert( ?title && ?a_table );
+
+	local params =
+	{
+		title = title,
+		finished = false,
+		tble = a_table,
+		result = null
+	};
+
+	local DrawGui = function(params)
+	{
+		foreach( key and val in params.tble )
+		{
+			if ( Gui.Button(key) )
+			{
+				params.result = key;
+				params.finished = true;
+				break;
+			}
+		}
+
+		Gui.Separator();
+		
+		if ( Gui.Button("Cancel") )
+		{
+			params.result = null;
+			params.finished = true;
+		}
+	};
+
+	while(!params.finished)
+	{
+		RegisterGui( params.title, DrawGui, null, params );
+		yield();
+	}
+
+	return params.result;
+};
+
+
+global TableValueChooser = function(title, a_table)
+{
+	assert( ?title && ?a_table );
+
+	local params =
+	{
+		title = title,
+		finished = false,
+		tble = a_table,
+		result = null
+	};
+
+	local DrawGui = function(params)
+	{
+		foreach( key and val in params.tble )
+		{
+			if ( Gui.Button(val) )
+			{
+				params.result = val;
+				params.finished = true;
+				break;
+			}
+		}
+
+		Gui.Separator();
+		
+		if ( Gui.Button("Cancel") )
+		{
+			params.result = null;
+			params.finished = true;
+		}
+	};
+
+	while(!params.finished)
+	{
+		RegisterGui( params.title, DrawGui, null, params );
+		yield();
+	}
+
+	return params.result;
+};
+
+
+global MessageBox = function(title, msg)
+{
+	assert( title && msg );
+	print("MessageBox: " + title + " - " + msg );
+
+	fork
+	{
+		local DrawGui = function(params)
+		{
+			Gui.Print(params.msg);
+			if ( Gui.Button("OK") ) { params.finished = true; }
+		};
+	
+		local params =
+		{
+			title = title,
+			finished = false,
+			msg = msg
+		};
+
+		while(!params.finished)
+		{
+			RegisterGui( params.title, DrawGui, null, params );
+			yield();
+		}
+	}
+};

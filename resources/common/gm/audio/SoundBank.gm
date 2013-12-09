@@ -1,0 +1,215 @@
+global MakeSoundBank = function(resourceFile)
+{
+	local SoundBank = 
+	{
+		guiSelectedIndex = -1,
+		resourceFile = resourceFile,
+		missingFile = "common/audio/error.ogg",
+
+		// sounds used in current frame
+		curr_frame_channels = {}, // name = channel
+
+		// channels
+		free_channels = {},
+		used_channels = {},
+
+		// buffers
+		sound_buffers = {},
+	};
+
+	SoundBank._InitFreeChannels = function()
+	{
+		local num_channels = 32;
+
+		local i;
+		for( i = 0; i < num_channels; i+= 1 )
+		{
+			.free_channels[i] = SoundChannel();
+		}
+	};
+
+	SoundBank._GetFreeChannel = function()
+	{
+		assert( tableCount(.free_channels) > 0 );
+		
+		local index = tableCount(.free_channels) - 1;
+		local channel = .free_channels[index];
+		.free_channels[index] = null;
+
+		return channel;
+	};
+
+	SoundBank._GarbageCollectUsedChannels = function()
+	{
+		foreach( key and channel in .used_channels )
+		{
+			if ( !channel.IsActive() )
+			{
+				.used_channels[key] = null;
+				.free_channels[ tableCount(.free_channels) ] = channel;
+			}
+		}
+	};
+
+	SoundBank._RecycleChannel = function(a_channel)
+	{
+		a_channel.Reset();
+		.free_channels[tableCount(.free_channels)] = a_channel;
+	};
+
+	// returns a channel with SoundBuffer bound..
+	SoundBank.Get = function(name)
+	{
+		local buffer = .sound_buffers[name];
+		assert(?buffer);
+
+		// TODO: make sure get doesnt get called too much!!
+
+		local channel = SoundChannel();
+		channel.BindBuffer(buffer);
+		._SetChannelProperties(name, channel);
+
+		return channel;
+	};
+
+	SoundBank._SetChannelProperties = function(a_name, a_channel)
+	{
+		local params = .resources[a_name];
+		a_channel.SetVolume(params.volume);
+		a_channel.SetLooping(params.loop);
+	};
+
+	SoundBank.Release = function()
+	{
+		.free_channels = null;
+		.used_channels = null;
+		.sound_buffers = null;
+		.curr_frame_channels = null;
+		.resources = null;
+
+		threadKill(.threadId);
+	};
+
+	// clear the table of curr frame 
+	SoundBank.PostUpdate = function()
+	{
+		._GarbageCollectUsedChannels();
+		tableClear(.curr_frame_channels);
+	};
+
+	// plays the sound if not already playing this frame
+	SoundBank.Play = function(name) 
+	{
+		//ignore if already playing this frame
+		if ( ?.curr_frame_channels[name] ) 
+		{
+			.curr_frame_channels[name];
+		}
+
+		local channel = ._PlayNow(name);
+		.curr_frame_channels[name] = channel;
+		return channel;
+	};
+
+	// play right now
+	SoundBank._PlayNow = function(name)
+	{
+		// sound not found
+		if ( !?.sound_buffers[name] )
+		{
+			MessageBox("Error", name + " not in sound bank." );
+			return;
+		}
+
+		else if ( .resources[name].filename == .missingFile )
+		{
+			Log("Missing sound file for sound '" + name + "'!");
+		}
+
+		local buffer = .sound_buffers[name];
+		assert(buffer);
+
+		local channel = ._GetFreeChannel();
+		channel.BindBuffer(buffer);
+		channel.Play();
+		._SetChannelProperties(name, channel);
+
+		.used_channels[channel] = channel;
+
+		return channel;
+	};
+
+	SoundBank.Gui = function() // need to call RegisterGui(..) on this to show
+	{
+		Gui.FillBarInt("Used Channels", tableCount(.used_channels), 0, 64 );
+		Gui.FillBarInt("Free Channels", tableCount(.free_channels), 0, 64 );
+
+		Gui.Header("Sounds (" + tableCount(.sound_buffers) + " total)");
+
+		local i = 0;
+		foreach( key and val in .resources )
+		{
+			local selected = .guiSelectedIndex == i;
+			local dropdown = Gui.DropDown( key, .guiSelectedIndex == i );
+
+			if ( !selected && dropdown )
+			{
+				.guiSelectedIndex = i;
+			}
+			else if ( selected && !dropdown )
+			{
+				.guiSelectedIndex = -1;
+			}
+
+			if ( .guiSelectedIndex == i )
+			{
+				Gui.Tab();
+
+				Gui.Print("File: " + val.filename );
+
+				// can play non-loops (because you can't stop)
+				if ( !val.loop )
+				{
+					if ( Gui.Button("Play") ) {	.Play(key); }
+				}
+
+				 Gui.FillBarFloat("Volume", val.volume, 0.0f, 1.0f );
+
+				// file
+				Gui.CheckBox("Streaming", val.stream );
+				Gui.CheckBox("Looping", val.loop );
+
+				Gui.Untab();
+			}
+
+			i += 1;
+		}
+	};
+
+	SoundBank._Init = function()
+	{
+		Log("Initializing Sound Bank...", false );
+
+		._InitFreeChannels();
+		._LoadSounds();		
+	};
+
+	SoundBank._LoadSounds = function()
+	{
+		.guiSelectedIndex = -1;
+		.resources = system.LoadTableFromFile(.resourceFile);
+		.sound_buffers = {};
+
+		// load and validate each sound
+		foreach( key and val in .resources )
+		{
+			assert( system.FileExists(val.filename) );
+			.sound_buffers[key] = SoundBuffer(val.filename);
+		}
+
+		Log("Loaded " + tableCount(.sound_buffers) + " sounds from file '"  + .resourceFile + "'");
+	};
+
+	SoundBank._Init();
+	return SoundBank;
+};

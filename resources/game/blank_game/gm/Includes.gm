@@ -1,0 +1,1 @@
+system.DoFile("game/blank_game/gm/DrawLayers.gm");

@@ -1,0 +1,533 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Final|Win32">
+      <Configuration>Final</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\cpp\engine\audio\fmod\FmodEventDesc.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\audio\fmod\FmodEventInst.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\audio\fmod\FmodFFT.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\audio\fmod\FmodSystem.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\audio\SoundBuffer.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\audio\SoundChannel.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\audio\SoundManager.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\common\Debug.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\common\Log.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\common\Memory.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\common\PCH.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">PCH.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\common\Profiler.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\core\App.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\core\CmdArgs.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\core\Core.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\ext\osc\OscHandler.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\Fbo.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\Font.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\FragShader.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\GLDebug.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\Ibo.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\ImmGfx.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\LineGraph.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\ObjLoader.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\RenderState.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\ShaderManager.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\ShaderProgram.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\ShaderUtil.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\SpriteBatchDrawer.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\SvgDrawer.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\SvgReader.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\Texture2d.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\TextureUtil.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\Vao.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\Vbo.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\VboBuilder.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\VertexBatcher.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\VertexLayout.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\VertexShader.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmArrayLib.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmArraySimple.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmByteCode.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmByteCodeGen.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmCall.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmCodeGen.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmCodeGenHooks.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmCodeTree.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmCrc.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmDebug.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmDebugger.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmDebuggerFunk.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmExtLibAudio.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmExtLibDebug.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmExtLibFmod.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmExtLibGfx.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmExtLibImmGfx.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmExtLibInput.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmExtLibMVP.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmExtLibProfiler.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmExtLibTouchInput.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmExtLibWindow.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmFunctionObject.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmGCRoot.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmGCRootUtil.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmHash.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmHelpers.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmIncGC.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmLibHooks.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmListDouble.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmLog.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmMachine.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmMachineLib.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmMathLib.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmMem.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmMemChain.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmMemFixed.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmMemFixedSet.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmOperators.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmParser.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmScanner.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmStream.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmStreamBuffer.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmStringLib.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmStringObject.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmSystemLib.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmTableObject.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmThread.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmUserObject.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmUtil.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmUtilEx.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmVariable.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmVector3Lib.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\hardware\leap\LeapController.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\imgui\Imgui.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\imgui\ImguiGM.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\imgui\ImguiManager.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\imgui\ImguiTilesheetChunks.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\imgui\ImguiWindow.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\math\Box3.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\math\Cam2d.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\math\Cam3d.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\math\CamBase.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\math\ColorUtil.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\math\CubicSpline2d.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\math\CurlNoise.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\math\matrix.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\math\MatrixStack.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\math\MVP.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\math\Perlin.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\math\Perlin2d.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\math\Ray.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\math\Util.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\math\v2.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\physics\Verlet2DBody.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\physics\Verlet3DBody.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\system\DataFile.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\system\FileModificationChecker.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\system\FileUtil.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\system\Input.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\system\Timer.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\system\TouchInputManager.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\system\Window.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\vm\VirtualConsole.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\vm\VirtualMachine.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\vm\VirtualMachineExceptionHandler.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\engine\vm\VirtualMachineLibs.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\game\blank_game\BlankGameObj.cpp" />
+    <ClCompile Include="..\..\..\..\cpp\game\blank_game\gmBlankGameInit.cpp" />
+    <ClCompile Include="..\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\cpp\engine\audio\ALIncludes.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\audio\fmod\FmodEventDesc.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\audio\fmod\FmodEventInst.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\audio\fmod\FmodFFT.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\audio\fmod\FmodIncludes.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\audio\fmod\FmodSystem.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\audio\SoundBuffer.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\audio\SoundChannel.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\audio\SoundManager.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\common\Debug.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\common\HandledObj.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\common\Log.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\common\Memory.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\common\PCH.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\common\Profiler.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\common\Singleton.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\common\StrongHandle.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\common\Util.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\config\UserConfig.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\core\App.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\core\CmdArgs.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\core\Core.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\ext\osc\OscHandler.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\ext\rapidxml\rapidxml.hpp" />
+    <ClInclude Include="..\..\..\..\cpp\engine\ext\rapidxml\rapidxml_funk.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\ext\rapidxml\rapidxml_iterators.hpp" />
+    <ClInclude Include="..\..\..\..\cpp\engine\ext\rapidxml\rapidxml_print.hpp" />
+    <ClInclude Include="..\..\..\..\cpp\engine\ext\rapidxml\rapidxml_utils.hpp" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\Fbo.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\Font.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\FragShader.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\GLDebug.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\GLIncludes.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\GLTypes.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\Ibo.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\ImmGfx.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\LineGraph.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\ObjLoader.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\RenderState.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\ShaderManager.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\ShaderProgram.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\ShaderUtil.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\SpriteBatchDrawer.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\SpriteDrawCmd.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\SvgDrawer.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\SvgReader.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\Texture2d.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\TextureUtil.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\Vao.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\Vbo.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\VboBuilder.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\VertexBatcher.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\VertexLayout.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\VertexShader.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmArrayLib.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmArraySimple.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmBind.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmBindFuncGen.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmBindHeader.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmBindHelper.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmByteCode.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmByteCodeGen.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmCall.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmCodeGen.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmCodeGenHooks.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmCodeTree.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmConfig.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmConfig_p.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmCrc.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmDebug.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmDebugger.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmDebuggerFunk.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmExtLibAudio.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmExtLibDebug.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmExtLibFmod.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmExtLibGfx.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmExtLibImmGfx.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmExtLibInput.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmExtLibMVP.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmExtLibProfiler.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmExtLibTouchInput.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmExtLibWindow.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmFunctionObject.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmGCRoot.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmGCRootUtil.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmHash.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmHelpers.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmIncGC.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmIterator.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmLibHooks.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmListDouble.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmLog.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmMachine.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmMachineLib.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmMathLib.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmMem.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmMemChain.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmMemFixed.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmMemFixedSet.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmOperators.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmParser.cpp.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmScanner.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmStream.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmStreamBuffer.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmStringLib.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmStringObject.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmSystemLib.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmTableObject.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmThread.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmUserObject.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmUtil.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmUtilEx.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmVariable.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmVector.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmVector3Lib.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\hardware\leap\LeapController.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\hardware\leap\LeapIncludes.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\hardware\leap\LeapTypes.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\imgui\Imgui.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\imgui\ImguiGM.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\imgui\ImguiManager.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\imgui\ImguiTilesheetChunks.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\imgui\ImguiWindow.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\math\Box3.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\math\Cam2d.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\math\Cam3d.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\math\CamBase.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\math\ColorUtil.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\math\Complex.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\math\Constants.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\math\CubicSpline2d.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\math\CurlNoise.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\math\float16.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\math\matrix.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\math\MatrixStack.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\math\MVP.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\math\Perlin.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\math\Perlin2d.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\math\Plane.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\math\Ray.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\math\Util.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\math\v2.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\math\v2i.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\math\v3.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\math\v4.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\math\vconv.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\physics\Verlet2DBody.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\physics\Verlet3DBody.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\physics\VerletBodyTemplate.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\physics\VerletTypes.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\system\Config.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\system\DataFile.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\system\FileModificationChecker.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\system\FileUtil.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\system\Input.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\system\Timer.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\system\TouchDefines.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\system\TouchInputManager.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\system\Window.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\vm\VirtualConsole.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\vm\VirtualMachine.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\vm\VirtualMachineExceptionHandler.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\vm\VirtualMachineLibs.h" />
+    <ClInclude Include="..\..\..\..\cpp\game\blank_game\BlankGameObj.h" />
+    <ClInclude Include="..\..\..\..\cpp\game\blank_game\gmBlankGameInit.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\..\resources\common\gm\audio\FmodStudioBank.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\audio\SoundBank.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\Config.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\Constants.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\Core.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\debug\Debug.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\DebugDrawManager.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\DrawManager.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\Fader.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\FboStack.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\Font.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\Gfx.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\HDR.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\MVP.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\Particles2d.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\ShaderBank.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\ShaderProgram.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\SplashScreen.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\SpriteAnimationBank.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\hardware\LeapHelpers.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\hardware\LeapManager.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\hardware\TouchInputManager.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\Includes.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\Test.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\ThreadGroups.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\tween\Tween.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\tween\TweenTask.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\tween\TweenTimeline.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\util\Ease.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\util\Imgui.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\util\ImguiHelper.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\util\State.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\util\StateMachine.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\util\Tools.gm" />
+    <None Include="..\..\..\..\..\resources\common\gm\util\Util.gm" />
+    <None Include="..\..\..\..\..\resources\common\shaders\fontDefault.fp" />
+    <None Include="..\..\..\..\..\resources\common\shaders\fontDefault.vp" />
+    <None Include="..\..\..\..\..\resources\common\shaders\gmDebuggerBG.fp" />
+    <None Include="..\..\..\..\..\resources\common\shaders\gmDebuggerBG.vp" />
+    <None Include="..\..\..\..\..\resources\common\shaders\hdr\hdr.vp" />
+    <None Include="..\..\..\..\..\resources\common\shaders\hdr\hdr_blur.fp" />
+    <None Include="..\..\..\..\..\resources\common\shaders\hdr\hdr_copy.fp" />
+    <None Include="..\..\..\..\..\resources\common\shaders\hdr\hdr_final.fp" />
+    <None Include="..\..\..\..\..\resources\common\shaders\hdr\hdr_threshold.fp" />
+    <None Include="..\..\..\..\..\resources\common\shaders\immGfxDefault.fp" />
+    <None Include="..\..\..\..\..\resources\common\shaders\immGfxDefault.vp" />
+    <None Include="..\..\..\..\..\resources\common\shaders\immGfxDefaultTex.fp" />
+    <None Include="..\..\..\..\..\resources\common\shaders\immGfxDefaultTex.vp" />
+    <None Include="..\..\..\..\..\resources\common\shaders\objDefault.fp" />
+    <None Include="..\..\..\..\..\resources\common\shaders\objDefault.vp" />
+    <None Include="..\..\..\..\cpp\engine\ext\osc\oscpkt.hh" />
+    <None Include="..\..\..\..\cpp\engine\ext\osc\udp.hh" />
+    <None Include="..\..\..\..\cpp\engine\math\Complex.inl" />
+    <None Include="..\..\..\..\cpp\engine\math\float16.inl" />
+    <None Include="..\..\..\..\cpp\engine\math\matrix.inl" />
+    <None Include="..\..\..\..\cpp\engine\math\v2.inl" />
+    <None Include="..\..\..\..\cpp\engine\math\v2i.inl" />
+    <None Include="..\..\..\..\cpp\engine\math\v3.inl" />
+    <None Include="..\..\..\..\cpp\engine\math\v3i.inl" />
+    <None Include="..\..\..\..\cpp\engine\math\v4.inl" />
+    <None Include="..\..\..\..\cpp\engine\physics\VerletBodyTemplate.tpp" />
+    <None Include="..\..\..\..\cpp\engine\system\Input.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="FunkEngine.rc" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{85EAAD74-1322-438C-982D-7D08A0890856}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>vs10</RootNamespace>
+    <ProjectName>FunkEngine</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)../../../extlib/fmod/include/;$(SolutionDir)../../../extlib/leap/include/;$(SolutionDir)../extlib/xiph/include/;$(SolutionDir)../extlib/SDL2/include/;$(SolutionDir)../extlib/openal/include/;$(SolutionDir)../extlib/devil/include/;$(SolutionDir)../extlib/glew/include/;$(SolutionDir)/../../../cpp/engine/;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)../../../extlib/fmod/include/;$(SolutionDir)../../../extlib/leap/include/;$(SolutionDir)../extlib/xiph/include/;$(SolutionDir)../extlib/devil/include/;$(SolutionDir)../extlib/openal/include/;$(SolutionDir)../extlib/glew/include/;$(SolutionDir)../extlib/SDL2/include/;$(SolutionDir)/../../../cpp/engine/;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)../../../extlib/fmod/include/;$(SolutionDir)../../../extlib/leap/include/;$(SolutionDir)../extlib/xiph/include/;$(SolutionDir)../extlib/devil/include/;$(SolutionDir)../extlib/openal/include/;$(SolutionDir)../extlib/glew/include/;$(SolutionDir)../extlib/SDL2/include/;$(SolutionDir)/../../../cpp/engine/;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;TRACE_TO_VISUALSTUDIO_OUTPUT_WINDOW;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>config/UserConfig.h;PCH.h;Memory.h</ForcedIncludeFiles>
+      <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
+      <AdditionalOptions>/MP8 %(AdditionalOptions)</AdditionalOptions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <ExceptionHandling>false</ExceptionHandling>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <ProgramDataBaseFileName>
+      </ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)../../../extlib/fmod/lib/;$(SolutionDir)../../../extlib/leap/lib/;$(SolutionDir)../extlib/xiph/lib/ogg/debug_/;$(SolutionDir)../extlib/xiph/lib/vorbis/debug_/;$(SolutionDir)../extlib/openal/libs/Win32/;$(SolutionDir)../extlib/openal/libs/Win32/EFX-Util_MT/;$(SolutionDir)../extlib/devil/lib/;$(SolutionDir)../extlib/glew/lib/;$(SolutionDir)../extlib/SDL2/lib/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>fmod_vc.lib;fmodstudio_vc.lib;Leap.lib;libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;EFX-Util.lib;SDL2.lib;glew32.lib;opengl32.lib;DevIL.lib;ILU.lib;ILUT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;TRACE_TO_VISUALSTUDIO_OUTPUT_WINDOW;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\..\..\cpp\engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>config/UserConfig.h;PCH.h;Memory.h</ForcedIncludeFiles>
+      <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
+      <AdditionalOptions>/MP8 /d2Zi+ %(AdditionalOptions)</AdditionalOptions>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <ExceptionHandling>false</ExceptionHandling>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <ProgramDataBaseFileName>
+      </ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(SolutionDir)../../../extlib/fmod/lib/;$(SolutionDir)../../../extlib/leap/lib/;$(SolutionDir)../extlib/xiph/lib/ogg/release_/;$(SolutionDir)../extlib/xiph/lib/vorbis/release_/;$(SolutionDir)../extlib/openal/libs/Win32/;$(SolutionDir)../extlib/openal/libs/Win32/EFX-Util_MT/;$(SolutionDir)../extlib/devil/lib/;$(SolutionDir)../extlib/glew/lib/;$(SolutionDir)../extlib/SDL2/lib/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>fmod_vc.lib;fmodstudio_vc.lib;Leap.lib;libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;EFX-Util.lib;SDL2.lib;glew32.lib;opengl32.lib;DevIL.lib;ILU.lib;ILUT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>FUNK_FINAL;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\..\..\cpp\engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>config/UserConfig.h;PCH.h;Memory.h</ForcedIncludeFiles>
+      <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
+      <AdditionalOptions>/MP8 %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <ExceptionHandling>false</ExceptionHandling>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <ProgramDataBaseFileName>
+      </ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(SolutionDir)../../../extlib/fmod/lib/;$(SolutionDir)../../../extlib/leap/lib/;$(SolutionDir)../extlib/xiph/lib/ogg/release_/;$(SolutionDir)../extlib/xiph/lib/vorbis/release_/;$(SolutionDir)../extlib/openal/libs/Win32/;$(SolutionDir)../extlib/openal/libs/Win32/EFX-Util_MT/;$(SolutionDir)../extlib/devil/lib/;$(SolutionDir)../extlib/glew/lib/;$(SolutionDir)../extlib/SDL2/lib/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>fmod_vc.lib;fmodstudio_vc.lib;Leap.lib;libogg_static.lib;libvorbis_static.lib;libvorbisfile_static.lib;OpenAL32.lib;EFX-Util.lib;SDL2.lib;glew32.lib;opengl32.lib;DevIL.lib;ILU.lib;ILUT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

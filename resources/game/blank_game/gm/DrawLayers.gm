@@ -1,0 +1,33 @@
+local AddDrawLayers = function()
+{
+	local val = 0;
+
+	.Clear				= val; val+=1;
+	.Background			= val; val+=1;
+
+
+	.Scene_CamBegin		= val; val+=1;
+	.Scene				= val; val+=1;
+	.Scene_Debug		= val; val+=1;
+	.Scene_CamEnd		= val; val+=1;
+	
+	.HUD_Begin			= val; val+=1;
+	.HUD				= val; val+=1;
+	.HUD_End			= val; val+=1;
+
+	.ScreenFade			= val; val+=1;
+	.Screen_Debug		= val; val+=1;
+	.UI					= val; val+=1;
+	
+	.Debug				= val; val+=1;
+
+
+	// DO NOT SET ME
+	._END				= val; val+=1;
+};
+
+global DrawLayers = {};
+DrawLayers:AddDrawLayers();
+
+g_drawManager.Clear();
+g_drawManager.Init();

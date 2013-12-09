@@ -1,0 +1,183 @@
+global TweenTaskStates =
+{
+	NEW = 1,
+	RUNNNING = 2,
+	FINISHED = 3,
+};
+
+global MakeTweenTask = function(ref, secs, data)
+{
+	assert(?secs);
+	assert(?data);
+
+	local TweenTask = 
+	{
+		ref = ref,
+		secs = secs,
+		data = data,
+		startParams = null,
+		state = TweenTaskStates.NEW,
+	};
+
+	// use Cubic interp by default
+	if ( !?data.Ease )
+	{
+		data.Ease = Ease.Cubic.Out;
+	}
+
+	TweenTask.Activate = function()
+	{
+		.state = TweenTaskStates.NEW;
+	};
+
+	TweenTask.Release = function()
+	{
+		.ref = null;
+		.data = {};
+		.startParams = {};
+	};
+
+	TweenTask.Stop = function()	{};
+	TweenTask.Pause = function() {};
+
+	TweenTask.Tick = function(timelineTime)
+	{
+		if ( .state == TweenTaskStates.FINISHED )
+		{ 
+			return false; 
+		}
+
+		// Delay
+		local delayTime = .data.Delay;
+		if ( !?delayTime ) { delay = 0.0f; }
+		local totalTimeTask = .secs + delayTime;
+
+		// start the task!
+		if ( .state == TweenTaskStates.NEW  )
+		{
+			if ( timelineTime >= delayTime )
+			{
+				._OnStart();
+			}
+		}
+
+		else
+		{
+			// if ref dne, exit
+			if ( .ref == null )
+			{ 
+				._OnComplete();
+				return false; 
+			}
+
+			// interpolate
+			local t = saturate( (timelineTime-delayTime) / (totalTimeTask-delayTime) );
+			._Interpolate(t);
+
+			// OnUpdate callback
+			if ( ?.data.OnUpdate )
+			{
+				local obj = .data.OnUpdateObj;
+				local func = .data.OnUpdate;
+				obj:func( t, .data.OnUpdateArg );
+			}
+
+			// finished task
+			if ( timelineTime > totalTimeTask )
+			{
+				._OnComplete();
+				return false;
+			}
+		}
+
+		return true;
+	};
+
+	TweenTask._Interpolate = function( t )
+	{
+		local interpFunc = .data.Ease;
+		local interpArg = .data.EaseArg;
+		local t = interpFunc(t, interpArg);
+
+		// Interpolate all values!
+		foreach( key and val in .startParams )
+		{
+			local start = val;
+			local end = .data[key];
+
+			.ref[key] = lerp( start, end, t );
+		}
+	};
+
+	TweenTask._IsReservedParam = function(key)
+	{
+		return key == "Delay"
+			|| key == "Ease"
+			|| key == "EaseArg"
+			
+			// OnStartObj:OnStart(OnStartArg)
+			|| key == "OnStart"			
+			|| key == "OnStartObj"
+			|| key == "OnStartArg"
+
+			// OnCompleteObj:OnComplete(OnCompleteArg)
+			|| key == "OnComplete"		
+			|| key == "OnCompleteObj"
+			|| key == "OnCompleteArg"
+
+			// OnUpdateObj:OnUpdate(t,OnUpdateArg)
+			|| key == "OnUpdate"		
+			|| key == "OnUpdateObj"
+			|| key == "OnUpdateArg"
+		;
+	};
+
+	TweenTask._OnStart = function()
+	{
+		//Log("-> Task START");
+
+		.state = TweenTaskStates.RUNNING;
+
+		// OnStart callback
+		if ( ?.data.OnStart )
+		{
+			local func = .data.OnStart;
+			local obj = .data.OnStartObj;
+			obj:func( .data.OnStartArg );
+		}
+
+		.startParams = {};
+
+		// collect start params
+		foreach( key and val in .data )
+		{	
+			if ( !._IsReservedParam(key) )
+			{
+				// reference does not have that value!!
+				assert(?.ref[key]);
+
+				.startParams[key] = .ref[key];
+			}
+		}
+	};
+
+	TweenTask._OnComplete = function()
+	{
+		//Log("-> Task COMPLETE!");
+
+		.state = TweenTaskStates.FINISHED;
+
+		// OnComplete Callback
+		if ( ?.data.OnComplete )
+		{
+			local func = .data.OnComplete;
+			local obj = .data.OnCompleteObj;
+			obj:func( .data.OnCompleteArg );
+		}
+
+		.startParams = {};
+	};
+
+	return TweenTask;
+};
+

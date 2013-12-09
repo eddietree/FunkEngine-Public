@@ -1,0 +1,24 @@
+
+
+global Log = function( a_str, a0, a1, a2, a3, a4, a5, a6, a7, a8, end )
+{
+    return LogChannel( "default", a_str, a0, a1, a2, a3, a4, a5, a6, a7, a8, end );
+};
+
+global LogChannel = function( a_channel, a_str, a0, a1, a2, a3, a4, a5, a6, a7, a8, end )
+{
+    // add more parameters
+    assert( !?end );
+
+	if ( !DebugSettings.LogEnabled ) { return; }
+
+    // TODO: channel support
+    //if ( !LogEnabled( a_channel ) ) { return; }
+
+    local newline = true;
+    local text = format( a_str, a0, a1, a2, a3, a4, a5, a6, a7, a8 );
+
+	Console.Log( text, true );
+	
+	//print(text);
+};

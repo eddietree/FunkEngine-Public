@@ -1,0 +1,1181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\cpp\engine\core\App.cpp">
+      <Filter>cpp\engine\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\core\Core.cpp">
+      <Filter>cpp\engine\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\Font.cpp">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\FragShader.cpp">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\GLDebug.cpp">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\Ibo.cpp">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\ImmGfx.cpp">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\LineGraph.cpp">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\ShaderManager.cpp">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\ShaderProgram.cpp">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\ShaderUtil.cpp">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\Texture2d.cpp">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\TextureUtil.cpp">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\Vao.cpp">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\Vbo.cpp">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\VertexLayout.cpp">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\VertexShader.cpp">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmArrayLib.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmArraySimple.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmByteCode.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmByteCodeGen.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmCall.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmCodeGen.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmCodeGenHooks.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmCodeTree.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmCrc.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmDebug.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmDebugger.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmDebuggerFunk.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmExtLibGfx.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmExtLibImmGfx.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmExtLibInput.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmExtLibMVP.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmExtLibTouchInput.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmExtLibWindow.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmFunctionObject.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmGCRoot.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmGCRootUtil.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmHash.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmHelpers.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmIncGC.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmLibHooks.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmListDouble.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmLog.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmMachine.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmMachineLib.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmMathLib.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmMem.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmMemChain.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmMemFixed.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmMemFixedSet.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmOperators.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmParser.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmScanner.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmStream.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmStreamBuffer.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmStringLib.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmStringObject.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmSystemLib.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmTableObject.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmThread.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmUserObject.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmUtil.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmUtilEx.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmVariable.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmVector3Lib.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\imgui\Imgui.cpp">
+      <Filter>cpp\engine\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\imgui\ImguiGM.cpp">
+      <Filter>cpp\engine\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\imgui\ImguiManager.cpp">
+      <Filter>cpp\engine\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\imgui\ImguiWindow.cpp">
+      <Filter>cpp\engine\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\math\Box3.cpp">
+      <Filter>cpp\engine\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\math\Cam2d.cpp">
+      <Filter>cpp\engine\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\math\Cam3d.cpp">
+      <Filter>cpp\engine\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\math\CamBase.cpp">
+      <Filter>cpp\engine\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\math\ColorUtil.cpp">
+      <Filter>cpp\engine\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\math\CubicSpline2d.cpp">
+      <Filter>cpp\engine\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\math\CurlNoise.cpp">
+      <Filter>cpp\engine\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\math\matrix.cpp">
+      <Filter>cpp\engine\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\math\MatrixStack.cpp">
+      <Filter>cpp\engine\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\math\MVP.cpp">
+      <Filter>cpp\engine\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\math\Perlin.cpp">
+      <Filter>cpp\engine\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\math\Perlin2d.cpp">
+      <Filter>cpp\engine\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\math\Ray.cpp">
+      <Filter>cpp\engine\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\math\Util.cpp">
+      <Filter>cpp\engine\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\math\v2.cpp">
+      <Filter>cpp\engine\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\physics\Verlet2DBody.cpp">
+      <Filter>cpp\engine\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\system\FileUtil.cpp">
+      <Filter>cpp\engine\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\system\Input.cpp">
+      <Filter>cpp\engine\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\system\Timer.cpp">
+      <Filter>cpp\engine\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\system\TouchInputManager.cpp">
+      <Filter>cpp\engine\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\system\Window.cpp">
+      <Filter>cpp\engine\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\vm\VirtualConsole.cpp">
+      <Filter>cpp\engine\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\vm\VirtualMachine.cpp">
+      <Filter>cpp\engine\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\vm\VirtualMachineLibs.cpp">
+      <Filter>cpp\engine\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\main.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\ObjLoader.cpp">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\core\CmdArgs.cpp">
+      <Filter>cpp\engine\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\audio\SoundManager.cpp">
+      <Filter>cpp\engine\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\system\DataFile.cpp">
+      <Filter>cpp\engine\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\Fbo.cpp">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\common\Debug.cpp">
+      <Filter>cpp\engine\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\SvgReader.cpp">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\SvgDrawer.cpp">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\common\Memory.cpp">
+      <Filter>cpp\engine\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\common\PCH.cpp">
+      <Filter>cpp\engine\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\hardware\leap\LeapController.cpp">
+      <Filter>cpp\engine\hardware\leap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\audio\SoundBuffer.cpp">
+      <Filter>cpp\engine\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\audio\SoundChannel.cpp">
+      <Filter>cpp\engine\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\audio\fmod\FmodSystem.cpp">
+      <Filter>cpp\engine\audio\fmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmExtLibFmod.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\audio\fmod\FmodEventDesc.cpp">
+      <Filter>cpp\engine\audio\fmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\audio\fmod\FmodEventInst.cpp">
+      <Filter>cpp\engine\audio\fmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\common\Log.cpp">
+      <Filter>cpp\engine\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmExtLibDebug.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\vm\VirtualMachineExceptionHandler.cpp">
+      <Filter>cpp\engine\vm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\RenderState.cpp">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\system\FileModificationChecker.cpp">
+      <Filter>cpp\engine\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\physics\Verlet3DBody.cpp">
+      <Filter>cpp\engine\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\VertexBatcher.cpp">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\VboBuilder.cpp">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\audio\fmod\FmodFFT.cpp">
+      <Filter>cpp\engine\audio\fmod</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmExtLibAudio.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gfx\SpriteBatchDrawer.cpp">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\imgui\ImguiTilesheetChunks.cpp">
+      <Filter>cpp\engine\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\ext\osc\OscHandler.cpp">
+      <Filter>cpp\engine\ext\osc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\common\Profiler.cpp">
+      <Filter>cpp\engine\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\engine\gm\gmExtLibProfiler.cpp">
+      <Filter>cpp\engine\gm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\game\blank_game\gmBlankGameInit.cpp">
+      <Filter>game\blank_game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\cpp\game\blank_game\BlankGameObj.cpp">
+      <Filter>game\blank_game</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\cpp\engine\common\Debug.h">
+      <Filter>cpp\engine\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\common\HandledObj.h">
+      <Filter>cpp\engine\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\common\Singleton.h">
+      <Filter>cpp\engine\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\common\StrongHandle.h">
+      <Filter>cpp\engine\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\common\Util.h">
+      <Filter>cpp\engine\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\core\App.h">
+      <Filter>cpp\engine\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\core\Core.h">
+      <Filter>cpp\engine\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\Font.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\FragShader.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\GLDebug.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\GLIncludes.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\GLTypes.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\Ibo.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\ImmGfx.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\LineGraph.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\ShaderManager.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\ShaderProgram.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\ShaderUtil.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\Texture2d.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\TextureUtil.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\Vao.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\Vbo.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\VertexLayout.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\VertexShader.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmArrayLib.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmArraySimple.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmBind.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmBindFuncGen.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmBindHeader.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmBindHelper.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmByteCode.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmByteCodeGen.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmCall.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmCodeGen.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmCodeGenHooks.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmCodeTree.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmConfig.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmConfig_p.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmCrc.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmDebug.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmDebugger.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmDebuggerFunk.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmExtLibGfx.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmExtLibImmGfx.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmExtLibInput.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmExtLibMVP.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmExtLibTouchInput.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmExtLibWindow.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmFunctionObject.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmGCRoot.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmGCRootUtil.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmHash.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmHelpers.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmIncGC.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmIterator.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmLibHooks.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmListDouble.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmLog.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmMachine.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmMachineLib.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmMathLib.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmMem.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmMemChain.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmMemFixed.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmMemFixedSet.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmOperators.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmParser.cpp.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmScanner.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmStream.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmStreamBuffer.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmStringLib.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmStringObject.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmSystemLib.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmTableObject.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmThread.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmUserObject.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmUtil.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmUtilEx.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmVariable.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmVector.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmVector3Lib.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\imgui\Imgui.h">
+      <Filter>cpp\engine\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\imgui\ImguiGM.h">
+      <Filter>cpp\engine\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\imgui\ImguiManager.h">
+      <Filter>cpp\engine\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\imgui\ImguiWindow.h">
+      <Filter>cpp\engine\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\math\Box3.h">
+      <Filter>cpp\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\math\Cam2d.h">
+      <Filter>cpp\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\math\Cam3d.h">
+      <Filter>cpp\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\math\CamBase.h">
+      <Filter>cpp\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\math\ColorUtil.h">
+      <Filter>cpp\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\math\Complex.h">
+      <Filter>cpp\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\math\CubicSpline2d.h">
+      <Filter>cpp\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\math\CurlNoise.h">
+      <Filter>cpp\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\math\matrix.h">
+      <Filter>cpp\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\math\MatrixStack.h">
+      <Filter>cpp\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\math\MVP.h">
+      <Filter>cpp\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\math\Perlin.h">
+      <Filter>cpp\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\math\Perlin2d.h">
+      <Filter>cpp\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\math\Plane.h">
+      <Filter>cpp\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\math\Ray.h">
+      <Filter>cpp\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\math\Util.h">
+      <Filter>cpp\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\math\v2.h">
+      <Filter>cpp\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\math\v2i.h">
+      <Filter>cpp\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\math\v3.h">
+      <Filter>cpp\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\math\v4.h">
+      <Filter>cpp\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\physics\Verlet2DBody.h">
+      <Filter>cpp\engine\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\system\Config.h">
+      <Filter>cpp\engine\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\system\FileUtil.h">
+      <Filter>cpp\engine\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\system\Input.h">
+      <Filter>cpp\engine\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\system\Timer.h">
+      <Filter>cpp\engine\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\system\TouchDefines.h">
+      <Filter>cpp\engine\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\system\TouchInputManager.h">
+      <Filter>cpp\engine\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\system\Window.h">
+      <Filter>cpp\engine\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\vm\VirtualConsole.h">
+      <Filter>cpp\engine\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\vm\VirtualMachine.h">
+      <Filter>cpp\engine\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\vm\VirtualMachineLibs.h">
+      <Filter>cpp\engine\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\ObjLoader.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\core\CmdArgs.h">
+      <Filter>cpp\engine\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\audio\ALIncludes.h">
+      <Filter>cpp\engine\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\audio\SoundManager.h">
+      <Filter>cpp\engine\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\system\DataFile.h">
+      <Filter>cpp\engine\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\Fbo.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>winres</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\SvgDrawer.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\SvgReader.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\math\vconv.h">
+      <Filter>cpp\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\ext\rapidxml\rapidxml.hpp">
+      <Filter>cpp\engine\ext\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\ext\rapidxml\rapidxml_iterators.hpp">
+      <Filter>cpp\engine\ext\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\ext\rapidxml\rapidxml_print.hpp">
+      <Filter>cpp\engine\ext\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\ext\rapidxml\rapidxml_utils.hpp">
+      <Filter>cpp\engine\ext\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\ext\rapidxml\rapidxml_funk.h">
+      <Filter>cpp\engine\ext\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\common\Memory.h">
+      <Filter>cpp\engine\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\common\PCH.h">
+      <Filter>cpp\engine\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\hardware\leap\LeapController.h">
+      <Filter>cpp\engine\hardware\leap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\hardware\leap\LeapIncludes.h">
+      <Filter>cpp\engine\hardware\leap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\audio\SoundBuffer.h">
+      <Filter>cpp\engine\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\math\Constants.h">
+      <Filter>cpp\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\audio\SoundChannel.h">
+      <Filter>cpp\engine\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\audio\fmod\FmodSystem.h">
+      <Filter>cpp\engine\audio\fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\audio\fmod\FmodIncludes.h">
+      <Filter>cpp\engine\audio\fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmExtLibFmod.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\audio\fmod\FmodEventDesc.h">
+      <Filter>cpp\engine\audio\fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\audio\fmod\FmodEventInst.h">
+      <Filter>cpp\engine\audio\fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\config\UserConfig.h" />
+    <ClInclude Include="..\..\..\..\cpp\engine\common\Log.h">
+      <Filter>cpp\engine\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmExtLibDebug.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\hardware\leap\LeapTypes.h">
+      <Filter>cpp\engine\hardware\leap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\vm\VirtualMachineExceptionHandler.h">
+      <Filter>cpp\engine\vm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\math\float16.h">
+      <Filter>cpp\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\RenderState.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\system\FileModificationChecker.h">
+      <Filter>cpp\engine\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\physics\VerletTypes.h">
+      <Filter>cpp\engine\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\physics\VerletBodyTemplate.h">
+      <Filter>cpp\engine\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\physics\Verlet3DBody.h">
+      <Filter>cpp\engine\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\VertexBatcher.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\VboBuilder.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\audio\fmod\FmodFFT.h">
+      <Filter>cpp\engine\audio\fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmExtLibAudio.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\SpriteBatchDrawer.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gfx\SpriteDrawCmd.h">
+      <Filter>cpp\engine\gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\imgui\ImguiTilesheetChunks.h">
+      <Filter>cpp\engine\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\ext\osc\OscHandler.h">
+      <Filter>cpp\engine\ext\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\common\Profiler.h">
+      <Filter>cpp\engine\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\engine\gm\gmExtLibProfiler.h">
+      <Filter>cpp\engine\gm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\game\blank_game\gmBlankGameInit.h">
+      <Filter>game\blank_game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\cpp\game\blank_game\BlankGameObj.h">
+      <Filter>game\blank_game</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="cpp">
+      <UniqueIdentifier>{a1032122-89b2-4714-8484-1fd1292fe8f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp\engine">
+      <UniqueIdentifier>{1e308d58-5d5a-41df-a6ab-cc156f53a6b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp\engine\common">
+      <UniqueIdentifier>{5a28f4ab-3373-4f2d-a5c2-3c894322e195}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp\engine\core">
+      <UniqueIdentifier>{92a81c74-ba13-4006-bdd0-f653008d7125}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp\engine\gfx">
+      <UniqueIdentifier>{b16f442c-b44d-49d6-a94a-dca29c91579c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp\engine\gm">
+      <UniqueIdentifier>{6aa26bed-2064-4b6e-9615-613c4ad6c341}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp\engine\imgui">
+      <UniqueIdentifier>{ad2bbf8d-b354-4708-8e65-cc94737bac06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp\engine\math">
+      <UniqueIdentifier>{92bcf635-55e0-44df-a950-0bf096517ff3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp\engine\physics">
+      <UniqueIdentifier>{31e0c04f-a293-461a-81b2-eb6a8c563ad1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp\engine\system">
+      <UniqueIdentifier>{b9744fdc-7365-49cc-8674-d38a36840c2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp\engine\vm">
+      <UniqueIdentifier>{9a90e4c6-1238-4bc2-aa36-b3dc2478d91f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp\engine\audio">
+      <UniqueIdentifier>{1821d020-2c72-42b0-96aa-0c247b63a250}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources">
+      <UniqueIdentifier>{e5c2febb-2ef5-4e31-9a6f-146c9f7791fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\common">
+      <UniqueIdentifier>{c0bf9fe4-cbf2-486a-b9fe-252482b43d82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\common\gm">
+      <UniqueIdentifier>{1fe1e449-3855-4c1f-910a-a5f53f72f90f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\common\shaders">
+      <UniqueIdentifier>{b6678d76-d0d1-4ad8-baca-e1916b240821}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="winres">
+      <UniqueIdentifier>{f323207a-2a83-40a6-915c-3abcdf512d73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp\engine\ext">
+      <UniqueIdentifier>{b96926b2-1000-4a13-a9c6-ea0c48045631}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp\engine\ext\rapidxml">
+      <UniqueIdentifier>{81d1590b-baa4-4c32-b5ec-e4c6bbccd341}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp\engine\hardware">
+      <UniqueIdentifier>{4c911767-20cf-47cb-9260-3d4a76a808b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp\engine\hardware\leap">
+      <UniqueIdentifier>{1bd55b6f-4b32-48c2-a8df-5303e23f7832}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game">
+      <UniqueIdentifier>{90429777-91bc-4f51-9c3e-09cd433d260f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp\engine\audio\fmod">
+      <UniqueIdentifier>{fbf32c2b-ac83-4eac-bf7a-fbeac74f157b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\common\gm\audio">
+      <UniqueIdentifier>{29660ab0-77cf-4678-b277-170709fc3209}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\common\gm\debug">
+      <UniqueIdentifier>{7dbd592b-3078-4b09-8060-8b689211e3c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\common\gm\gfx">
+      <UniqueIdentifier>{0b06c0e1-3e2d-49d9-80bf-4fae7e8f1d00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\common\gm\hardware">
+      <UniqueIdentifier>{4c872c13-9992-4f1e-92a8-78b0a87e1589}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\common\gm\tween">
+      <UniqueIdentifier>{1e50b80a-ecd3-47ac-a927-49103ba719f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\common\gm\util">
+      <UniqueIdentifier>{7b84c5d7-fdb3-4dc9-81f2-1f4cafad4889}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\common\shaders\hdr">
+      <UniqueIdentifier>{4f306269-2b39-4945-92b7-90cf189daafa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp\engine\ext\osc">
+      <UniqueIdentifier>{ef668ef4-757e-44bb-a8b4-e42be52b5edd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game\blank_game">
+      <UniqueIdentifier>{e5f6d68c-39ed-4cea-a3dc-db81ffb244c7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\cpp\engine\math\Complex.inl">
+      <Filter>cpp\engine\math</Filter>
+    </None>
+    <None Include="..\..\..\..\cpp\engine\math\matrix.inl">
+      <Filter>cpp\engine\math</Filter>
+    </None>
+    <None Include="..\..\..\..\cpp\engine\math\v2.inl">
+      <Filter>cpp\engine\math</Filter>
+    </None>
+    <None Include="..\..\..\..\cpp\engine\math\v2i.inl">
+      <Filter>cpp\engine\math</Filter>
+    </None>
+    <None Include="..\..\..\..\cpp\engine\math\v4.inl">
+      <Filter>cpp\engine\math</Filter>
+    </None>
+    <None Include="..\..\..\..\cpp\engine\system\Input.inl">
+      <Filter>cpp\engine\system</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\shaders\fontDefault.fp">
+      <Filter>resources\common\shaders</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\shaders\gmDebuggerBG.fp">
+      <Filter>resources\common\shaders</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\shaders\immGfxDefault.fp">
+      <Filter>resources\common\shaders</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\shaders\immGfxDefaultTex.fp">
+      <Filter>resources\common\shaders</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\shaders\objDefault.fp">
+      <Filter>resources\common\shaders</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\shaders\fontDefault.vp">
+      <Filter>resources\common\shaders</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\shaders\gmDebuggerBG.vp">
+      <Filter>resources\common\shaders</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\shaders\immGfxDefault.vp">
+      <Filter>resources\common\shaders</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\shaders\immGfxDefaultTex.vp">
+      <Filter>resources\common\shaders</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\shaders\objDefault.vp">
+      <Filter>resources\common\shaders</Filter>
+    </None>
+    <None Include="..\..\..\..\cpp\engine\math\float16.inl">
+      <Filter>cpp\engine\math</Filter>
+    </None>
+    <None Include="..\..\..\..\cpp\engine\physics\VerletBodyTemplate.tpp">
+      <Filter>cpp\engine\physics</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\Core.gm">
+      <Filter>resources\common\gm</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\Includes.gm">
+      <Filter>resources\common\gm</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\ThreadGroups.gm">
+      <Filter>resources\common\gm</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\Constants.gm">
+      <Filter>resources\common\gm</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\audio\FmodStudioBank.gm">
+      <Filter>resources\common\gm\audio</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\audio\SoundBank.gm">
+      <Filter>resources\common\gm\audio</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\debug\Debug.gm">
+      <Filter>resources\common\gm\debug</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\HDR.gm">
+      <Filter>resources\common\gm\gfx</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\MVP.gm">
+      <Filter>resources\common\gm\gfx</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\Particles2d.gm">
+      <Filter>resources\common\gm\gfx</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\ShaderBank.gm">
+      <Filter>resources\common\gm\gfx</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\ShaderProgram.gm">
+      <Filter>resources\common\gm\gfx</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\SplashScreen.gm">
+      <Filter>resources\common\gm\gfx</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\SpriteAnimationBank.gm">
+      <Filter>resources\common\gm\gfx</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\DrawManager.gm">
+      <Filter>resources\common\gm\gfx</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\Fader.gm">
+      <Filter>resources\common\gm\gfx</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\Font.gm">
+      <Filter>resources\common\gm\gfx</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\Gfx.gm">
+      <Filter>resources\common\gm\gfx</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\hardware\LeapManager.gm">
+      <Filter>resources\common\gm\hardware</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\hardware\TouchInputManager.gm">
+      <Filter>resources\common\gm\hardware</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\util\Imgui.gm">
+      <Filter>resources\common\gm\util</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\util\State.gm">
+      <Filter>resources\common\gm\util</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\util\StateMachine.gm">
+      <Filter>resources\common\gm\util</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\util\Tools.gm">
+      <Filter>resources\common\gm\util</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\util\Util.gm">
+      <Filter>resources\common\gm\util</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\util\Ease.gm">
+      <Filter>resources\common\gm\util</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\tween\TweenTimeline.gm">
+      <Filter>resources\common\gm\tween</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\tween\Tween.gm">
+      <Filter>resources\common\gm\tween</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\tween\TweenTask.gm">
+      <Filter>resources\common\gm\tween</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\FboStack.gm">
+      <Filter>resources\common\gm\gfx</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\shaders\hdr\hdr_copy.fp">
+      <Filter>resources\common\shaders\hdr</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\shaders\hdr\hdr_final.fp">
+      <Filter>resources\common\shaders\hdr</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\shaders\hdr\hdr_threshold.fp">
+      <Filter>resources\common\shaders\hdr</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\shaders\hdr\hdr.vp">
+      <Filter>resources\common\shaders\hdr</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\shaders\hdr\hdr_blur.fp">
+      <Filter>resources\common\shaders\hdr</Filter>
+    </None>
+    <None Include="..\..\..\..\cpp\engine\math\v3i.inl">
+      <Filter>cpp\engine\math</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\hardware\LeapHelpers.gm">
+      <Filter>resources\common\gm\hardware</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\Config.gm">
+      <Filter>resources\common\gm</Filter>
+    </None>
+    <None Include="..\..\..\..\cpp\engine\math\v3.inl">
+      <Filter>cpp\engine\math</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\Test.gm">
+      <Filter>resources\common\gm</Filter>
+    </None>
+    <None Include="..\..\..\..\cpp\engine\ext\osc\oscpkt.hh">
+      <Filter>cpp\engine\ext\osc</Filter>
+    </None>
+    <None Include="..\..\..\..\cpp\engine\ext\osc\udp.hh">
+      <Filter>cpp\engine\ext\osc</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\util\ImguiHelper.gm">
+      <Filter>resources\common\gm\util</Filter>
+    </None>
+    <None Include="..\..\..\..\..\resources\common\gm\gfx\DebugDrawManager.gm">
+      <Filter>resources\common\gm\gfx</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="FunkEngine.rc">
+      <Filter>winres</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

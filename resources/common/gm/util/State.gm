@@ -1,0 +1,22 @@
+global CreateState = function()
+{
+	local State = 
+	{
+		time_duration = 0.0f, // seconds in the state
+		name = "",
+		parent = null, // parent state machine - will be set/released by StateMachine
+	};
+
+	// overloadable
+	State.Update	= function() {};
+	State.OnEnter	= function( a_prev_state_name, a_prev_state_obj ) {};
+	State.OnExit	= function( a_next_state_name, a_next_state_obj ) {};
+	State.Release	= function() {};
+
+	State.GetTimeDuration = function()
+	{
+		return .time_duration;
+	};
+	
+	return State;
+};

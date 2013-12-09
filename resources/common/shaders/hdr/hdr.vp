@@ -1,0 +1,12 @@
+attribute vec3 attrib_0; // pos
+attribute vec2 attrib_1; // uv
+attribute vec4 attrib_2; // normal
+attribute vec4 attrib_3; // color
+
+varying mediump vec2 uv;
+
+void main()
+{
+    gl_Position = vec4(attrib_0, 1.0);
+	uv			= attrib_1;
+}

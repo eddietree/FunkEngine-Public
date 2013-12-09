@@ -1,0 +1,22 @@
+attribute vec3 attrib_0; // pos
+attribute vec2 attrib_1; // uv
+attribute vec4 attrib_2; // normal
+attribute vec4 attrib_3; // color
+
+varying mediump vec4 color;
+varying mediump vec3 normal;
+varying mediump vec2 uv;
+
+uniform mat4 u_mvp;
+uniform float u_point_size;
+
+void main()
+{
+    gl_Position = u_mvp * vec4(attrib_0, 1.0);
+	gl_PointSize = u_point_size;
+
+	uv		= attrib_1;
+	normal	= (attrib_2.xyz);
+	//normal	= normalize(attrib_2.xyz);
+	color	= attrib_3;
+}

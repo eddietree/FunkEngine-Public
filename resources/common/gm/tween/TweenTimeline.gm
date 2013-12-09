@@ -1,0 +1,220 @@
+global TweenTimeline = function()
+{
+	local Timeline = 
+	{
+		threadId = 0,
+		timer = 0.0f,
+		next = null,
+		paused = false,
+		tasks = {},
+	};
+
+	Timeline.InsertTimeline = function( timeline )
+	{
+		assert( ?timeline );
+		.tasks[] = timeline;
+	};
+
+	Timeline.AppendTimeline = function( timeline )
+	{
+		assert( ?timeline );
+
+		// find available next obj
+		local it = this;
+		while( it.next != null )
+		{ 
+			it = it.next;
+		}
+
+		it.next = timeline;
+		return timeline;
+	};
+
+	Timeline.Insert = function( ref, secs, data )
+	{	
+		local task = MakeTweenTask( ref, secs, data );
+		.tasks[] = task;
+
+		return task;
+	};
+
+	Timeline.Append = function( ref, secs, data )
+	{	
+		local timeline = TweenTimeline();
+		timeline.tasks[] = MakeTweenTask( ref, secs, data );
+		.AppendTimeline(timeline);
+
+		return timeline;
+	};
+	
+	Timeline.AppendDelay = function(secs, data)
+	{
+		if (!?data ) { data = {}; }
+		data.Delay = secs;
+
+		local timeline = TweenTimeline();
+		timeline.tasks[] = MakeTweenTask( null, 0.0f, data );
+		.AppendTimeline(timeline);
+	};
+
+	Timeline.Wait = function()
+	{
+		while ( !.IsFinished() )
+		{
+			yield();
+		}
+	};
+
+	Timeline.IsFinished = function()
+	{
+		local result = .threadId == 0 
+			&& ( .next == null || .next.IsFinished() );
+
+		return result;
+	};
+
+	Timeline.IsPaused = function()
+	{
+		return .paused;
+	};
+
+	Timeline.Pause = function(pause)
+	{
+		.paused = pause;
+
+		// Pause tasks
+		foreach( task in .tasks )
+		{
+			task.Pause(pause);
+		}
+
+		// Pause next
+		if ( ?.next ) { .next.Pause(pause); }
+	};
+
+	Timeline.Stop = function()
+	{
+		if ( .threadId != 0 )
+		{
+			threadKill(.threadId);
+		}
+
+		.threadId = 0;
+
+		// stop tasks
+		foreach( task in .tasks )
+		{
+			task.Stop();
+		}
+
+		// stop next
+		if ( ?.next ) { .next.Stop(); }
+	};
+
+	Timeline.Run = function()
+	{
+		assert( .threadId == 0 );
+		
+		fork id
+		{
+			._OnStart();
+
+			while(true)
+			{
+				if ( !.paused )
+				{
+					// run any available tasks
+					if ( !._RunTasks() ) 
+					{ 
+						break; 
+					}
+				}
+
+				yield();
+			}
+
+			._OnComplete();			
+		}
+
+		.threadId = id;
+	};
+
+	Timeline.Tick = function()
+	{
+		return !.IsFinished();
+	};
+
+	Timeline.Activate = function()
+	{
+		.Run();
+	};
+
+	Timeline.Release = function()
+	{
+		// release next
+		if ( ?.next )
+		{
+			.next.Release();
+		}
+
+		// release tasks
+		foreach( task in .tasks )
+		{
+			task.Release();
+		}
+		.tasks = null;
+
+		threadKill(.threadId);
+		.threadId = 0;
+		
+		.next = null;
+	};
+
+	Timeline._RunTasks = function()
+	{
+		// no more tasks to run?
+		if ( tableCount(.tasks) == 0 || .IsFinished() ) 
+		{ 
+			return false; 
+		}
+
+		.timer += g_dt;
+
+		local running = false;
+		
+		foreach(task in .tasks)
+		{
+			//debug();
+			running |= task.Tick(.timer);
+		}
+
+		return running;
+	};
+	
+	Timeline._OnStart = function()
+	{
+		//Log("TIMELINE START!" + tableCount(.tasks));
+		.timer = 0.0f;
+
+		foreach( task in .tasks )
+		{
+			task.Activate();
+		}
+	};
+
+	Timeline._OnComplete = function()
+	{
+		//Log("TIMELINE COMPLETE!" + tableCount(.tasks));
+
+		// does it have next timeline to run?
+		if ( ?.next )
+		{
+			.next.Run();
+		}
+
+		.threadId = 0;
+	};
+
+	return Timeline;
+};
+

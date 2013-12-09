@@ -1,0 +1,14 @@
+global ThreadGroups =
+{
+	MAIN = 0, // undeletable
+
+	GAME = 10,
+	SPRITE = 20,
+	ANIMATION = 30,
+	RENDER = 40,
+};
+
+for ( i = 0; i < 256; i += 1 )
+{
+	setThreadGroupActive( i, true );
+}

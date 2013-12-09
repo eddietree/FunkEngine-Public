@@ -1,0 +1,214 @@
+
+local CreateCore = function()
+{
+	local Core = {};
+
+	Core.frame			= 0;
+	Core.screenDimen	= Window.Dimen();
+	Core.monitorDimen	= Window.MonitorDimen();
+	Core.mousePos		= v2(0,0);
+	Core.mousePrev		= v2(0,0);
+	Core.mouseRelPos	= v2(0,0);
+
+	Core.screenCam2d	= Cam2d();
+	Core.screenCam2d.InitScreenSpace();
+
+	Core.Update = function()
+	{
+		while( true )
+		{
+			._HandleGui();
+			
+			// handle when window size changes
+			.screenDimen = Window.Dimen();
+			.screenCam2d.InitScreenSpace();
+
+            // TODO: just use Input.Mouse?
+			.mousePos = Input.GetMousePos();
+			.mouseRelPos = Input.GetMousePosRel();
+
+			.frame += 1;
+
+			yield();
+		}
+	};
+
+	Core._HandleGui = function()
+	{
+		if ( Input.DidKeyJustGoDown("F2") && g_debug )
+		{
+			global g_config_show_debug_gui;
+			g_config_show_debug_gui = !g_config_show_debug_gui;
+		}
+
+		global g_config_show_profiler_gui;
+
+		if ( Input.DidKeyJustGoDown("F3") && g_debug )
+		{
+			g_config_show_profiler_gui = !g_config_show_profiler_gui;
+		}
+
+		// if profiler gui is on. temporarily enable gui
+		if ( g_config_show_profiler_gui )
+		{
+			local old_show_debug = g_config_show_debug_gui;
+			g_config_show_debug_gui = true;
+
+			RegisterGui( "Profiler", Profiler.Gui );
+
+			if ( Profiler.HasLineGraphs() )
+			{
+				RegisterGui( "Profile Graphs", Profiler.GuiLineGraphs );				
+			}
+
+			g_config_show_debug_gui = old_show_debug;
+		}
+	};
+
+    Core._SelectGame = function()
+    {
+        local dirs = system.GetDirectoryList( "game/*" );
+        local stripped = table();
+
+        foreach ( dir in dirs )
+        {
+            if ( dir == "." || dir == ".." )
+            {
+                continue;
+            }
+
+            stripped[] = dir;
+        }
+
+        while ( !?DebugSettings.Game )
+        {
+            local draw_gui = function( a_games )
+            {
+                Gfx.ClearColor( Gfx.BLACK );
+
+        		foreach( game in a_games )
+        		{
+        			if ( Gui.Button( game ) )
+        			{
+        				DebugSettings.Game = game;
+        			}
+        		}
+            };
+
+            local func_clear_screen = function()
+            {
+            	Gfx.ClearColor( Gfx.YELLOW );
+				Gfx.Clear( Gfx.COLOR_BUFFER_BIT | Gfx.DEPTH_BUFFER_BIT );
+            };
+
+            RegisterGui( "Select Game", draw_gui, this, stripped );
+            RegisterDraw( DrawLayers.Clear, func_clear_screen );
+            yield();
+        }
+
+        return stripped;
+    };
+
+	Core.Init = function()
+	{	
+		global g_game = null;
+		global g_user; // need this global to get name
+
+        global DebugSettings = table();
+
+        // NOTE: special case for the committed UserConfig.h
+        if ( g_user == "DYNAMIC" )
+        {
+            g_user = system.GetUserName();
+        }
+
+		local user_config = format("common/gm/user/user_%s.gm", g_user);
+        local common_config = "common/gm/Config.gm";
+        local common_includes = "common/gm/Includes.gm";
+
+		system.DoFile( common_config );
+		system.DoFile( common_includes );
+
+        if ( system.FileExists( user_config ) ) { system.DoFile( user_config ); }
+
+        if ( !?DebugSettings.Game ) 
+        {
+            ._SelectGame();
+        }
+
+        assert( ?DebugSettings.Game );
+
+        local game = DebugSettings.Game;
+        local game_config = format("game/%s/gm/Config.gm", game);
+        local game_includes = format("game/%s/gm/Includes.gm", game);
+        local game_main = format("game/%s/gm/Game.gm", game);
+
+        if ( system.FileExists( game_config ) ) { system.DoFile( game_config ); }
+		if ( system.FileExists( game_config ) ) { system.DoFile( game_includes ); }
+
+		system.DoFile( game_main );
+        assert( ?g_game );
+
+		Log("Monitor Resolution: " + .monitorDimen);
+		Log("Window Resolution: " + .screenDimen);
+		Log("Debug Mode: " + g_debug );
+
+		.threadId = this:thread(.Update);
+
+		if ( !DebugSettings.SkipSplash )
+		{
+			local splash = CreateSplashScreen();
+			splash.Go();
+		}
+
+		Log("Running game: " + game_name);
+
+		g_drawManager.Clear();
+		g_imgui_mngr.Clear();
+		
+		sysCollectGarbage(true);
+
+        g_game.Init();
+        
+        // wait on game thread
+	};
+
+	// used external
+	Core.CallGameFunc = function(a_func_name, a_param)
+	{
+		if ( ?g_game )
+		{
+			Log("Core." + a_func_name);
+			local func = g_game[a_func_name];
+
+			if ( ?func)
+			{
+				g_game:func(a_param);
+			}
+		}
+	};
+
+	// called from "VirtualMachine.cpp"
+	Core.OnWindowMinimized = function() { .CallGameFunc("OnWindowMinimized"); };
+	Core.OnWindowRestored = function() { .CallGameFunc("OnWindowRestored"); };
+	Core.OnWindowFocusGained = function() { .CallGameFunc("OnWindowFocusGained"); };
+	Core.OnWindowFocusLost = function() { .CallGameFunc("OnWindowFocusLost"); };
+
+	Core.OnExit = function()
+	{
+		if ( ?g_game )
+		{
+			Log("Core exiting!");
+			g_game.OnExit();
+			//g_game.Release();
+			//g_game = null;
+			sysCollectGarbage(true);
+		}
+	};
+
+	
+	return Core;
+};
+
+global g_core = CreateCore();
+g_core.Init();

@@ -1,0 +1,167 @@
+global FmodPlaybackState =
+{
+	PLAYBACK_PLAYING	= 0,
+	PLAYBACK_IDLE		= 1,
+	PLAYBACK_SUSTAINING = 2,
+	PLAYBACK_STOPPED	= 3,
+};
+
+global FmodLoadingState =
+{
+	LOADING_STATE_UNLOADING	= 0,
+	LOADING_STATE_UNLOADED	= 1,
+	LOADING_STATE_LOADING	= 2,
+	LOADING_STATE_LOADED	= 3,
+};
+
+global MakeFmodStudioBank = function( a_bank_file, a_resource_events_file )
+{
+	local FmodStudioBank = 
+	{
+		bank_file = a_bank_file,
+		resource_events_data = system.LoadTableFromFile(a_resource_events_file),
+		event_descs_groups = {},
+
+		// oneshots that are playing
+		current_oneshots = {},
+
+		// gui
+		gui_show_resource_table = false,
+		gui_resource_table_selector = MakeGuiTableSelector(),
+		gui_loaded_events_table_selector = MakeGuiTableSelector(),
+	};
+
+	FmodStudioBank.Gui = function()
+	{
+        Gui.Minimize();
+		Gui.Print("File: " + .bank_file);
+		
+		Gui.Header("Loaded Event descriptions");
+		Gui.DisplayTable( .event_descs_groups, .gui_loaded_events_table_selector);
+
+		Gui.Separator();
+		.gui_show_resource_table = Gui.CheckBox("Show Event Resources", .gui_show_resource_table);
+		if(.gui_show_resource_table)
+		{
+			
+			Gui.Tab();
+			Gui.DisplayTable(.resource_events_data, .gui_resource_table_selector);
+			
+			Gui.Untab();
+		}
+
+		Gui.SliderInt("Curr Number Oneshots", tableCount(.current_oneshots), 0, 32 );
+	};
+
+	FmodStudioBank._GetEventDesc = function(a_event_group_name, a_event_name)
+	{
+		local event_group = .event_descs_groups[a_event_group_name];
+		if ( !?event_group )
+		{
+			Log("FMOD: _GetEventDesc, event group doesnt exist: " + a_event_group_name);
+			return null;
+		}
+
+		return .event_descs_groups[a_event_group_name][a_event_name];
+	};
+
+	FmodStudioBank.SpawnEventInst = function(a_event_group_name, a_event_name)
+	{
+		local event_desc = ._GetEventDesc(a_event_group_name, a_event_name);
+
+		if (!?event_desc)
+		{
+			Log("FMOD: Cannot spawn FMOD event: " + a_event_group_name + "/" + a_event_name);
+			
+			// if event was not found, return dummy event
+			local dummy_inst = .dummy_event_desc.SpawnInst();
+			return dummy_inst;
+		}
+
+		return event_desc.SpawnInst();
+	};
+
+	FmodStudioBank.PlayOneShot = function(a_event_group_name, a_event_name)
+	{
+		local event = .SpawnEventInst(a_event_group_name, a_event_name);
+		assert(?event);
+		event.Start();
+		.current_oneshots[event] = event;
+
+		return event;
+	};
+
+	FmodStudioBank.ReleaseOneShots = function()
+	{
+		Log("Releasing one shots");
+		foreach(oneshot in .current_oneshots )
+		{
+			oneshot.Stop(true);
+		}
+		.current_oneshots = {};
+	};
+
+	FmodStudioBank._UpdateOneShots = function()
+	{
+		foreach(key and oneshot in .current_oneshots )
+		{
+			if (oneshot.GetPlaybackState() == FmodPlaybackState.PLAYBACK_STOPPED)
+			{
+				.current_oneshots[key] = null;
+			}
+		}
+	};
+
+	FmodStudioBank.Update = function()
+	{
+		._UpdateOneShots();
+	};
+
+	FmodStudioBank.UnloadEventGroup = function(a_event_group_name)
+	{
+		// release
+		foreach( desc in .event_descs_groups[a_event_group_name] )
+		{
+			desc.Release();
+		}
+
+		.event_descs_groups[a_event_group_name] = null;
+	};
+
+	FmodStudioBank.LoadEventGroup = function(a_event_group_name)
+	{
+		// event group shouldn't already exist
+		assert( !?.event_descs_groups[a_event_group_name] );
+
+		// grab the data of the event group
+		local data_event_group = .resource_events_data[a_event_group_name];
+		assert(?data_event_group);
+
+		local event_descs = {};
+
+		foreach( key and data in data_event_group )
+		{
+			local event_desc = Fmod.CreateEventDesc(data.guid);
+			assert(?event_desc);
+			event_descs[key] = event_desc;
+		}
+
+		.event_descs_groups[a_event_group_name] = event_descs;
+	};
+
+	FmodStudioBank.Release = function()
+	{
+		Fmod.UnloadBank(.bank_file);
+	};
+
+	FmodStudioBank._Init = function()
+	{
+		Fmod.LoadBank(.bank_file);
+
+		.LoadEventGroup("default");
+		.dummy_event_desc = ._GetEventDesc("default", "missing");
+	};
+
+	FmodStudioBank._Init();
+	return FmodStudioBank;
+};

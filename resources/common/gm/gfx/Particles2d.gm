@@ -1,0 +1,441 @@
+global g_particles = 
+{
+	blendFunc = 
+	{
+		ZERO = Gfx.ZERO,
+		ONE = Gfx.ONE,
+		SRC_COLOR = Gfx.SRC_COLOR,
+		ZERO = Gfx.ZERO,
+		ONE_MINUS_SRC_COLOR = Gfx.ONE_MINUS_SRC_COLOR,
+		SRC_ALPHA = Gfx.SRC_ALPHA,
+		ONE_MINUS_SRC_ALPHA = Gfx.ONE_MINUS_SRC_ALPHA,
+		DST_ALPHA = Gfx.DST_ALPHA,
+		ONE_MINUS_DST_ALPHA = Gfx.ONE_MINUS_DST_ALPHA,
+		DST_COLOR = Gfx.DST_COLOR,
+		ONE_MINUS_DST_COLOR = Gfx.ONE_MINUS_DST_COLOR,
+		SRC_ALPHA_SATURATE = Gfx.SRC_ALPHA_SATURATE,
+	},
+
+	blendEq =
+	{
+		FUNC_ADD = Gfx.FUNC_ADD,
+		FUNC_SUBTRACT = Gfx.FUNC_SUBTRACT,
+	},
+
+	directory = "common/gm/particles/",
+	imgDirectory = "common/textures/particles/",
+
+	shaderDefault = CreateShaderProgramFromFilename("common/shader/particles2d.vp", "common/shader/particles2d.fp"),
+	shaderTexture = CreateShaderProgramFromFilename("common/shader/particles2d.vp", "common/shader/particles2dTex.fp"),
+};
+
+global MakeParticles2d = function(a_numParticles)
+{
+	local Particles = 
+	{ 
+		name = "UNTITLED",
+		useScreenCamera = true,
+		enable = true,
+		enableDraw = true,
+		showGui = false,
+		shader = g_particles.shaderDefault,
+		tex = null,
+		drawLayer = DrawLayers.UI,
+	};
+
+	Particles.DrawBegin = function()
+	{
+		.shader.Begin();
+
+		// bind texture?
+		if ( ?.tex )
+		{
+			.tex.Bind(0);
+			.shader.UniformTexBindIndex("tex", 0);
+		}
+	};
+
+	Particles.DrawEnd = function()
+	{
+		// unbind texture
+		if ( ?.tex )
+		{
+			.tex.Unbind();
+		}
+
+		.shader.End();
+	};
+
+	Particles.Draw = function()
+	{
+		if ( .useScreenCamera )
+		{
+			g_core.screenCam2d.Begin();
+		}
+
+		.DrawBegin();
+		.cpp.Draw();
+		.DrawEnd();
+
+		if ( .useScreenCamera )
+		{
+			g_core.screenCam2d.End();
+		}
+	};
+
+	Particles.LoadFile = function(filename)
+	{
+		Log("Loading Particles2D file: " + filename);
+
+		.name = filename; 
+
+		local params = system.LoadTableFromFile( g_particles.directory + .name );
+
+		.cpp.numParticlesPerEmission = params.numParticlesPerEmission;
+		.cpp.cooldown = params.cooldown;
+		.cpp.lifeSpan = params.lifeSpan;
+		.cpp.lifeSpanVariance = params.lifeSpanVariance;
+		.cpp.pos = params.pos;
+		.cpp.posVariance = params.posVariance;
+		.cpp.speed = params.speed;
+		.cpp.speedVariance = params.speedVariance;
+		.cpp.accel = params.accel;
+		.cpp.angle = params.angle;
+		.cpp.angleVariance = params.angleVariance;
+		.cpp.colorStart = params.colorStart;
+		.cpp.colorStartVariance = params.colorStartVariance;
+		.cpp.alphaStart = params.alphaStart;
+		.cpp.alphaStartVariance = params.alphaStartVariance;
+		.cpp.colorEnd = params.colorEnd;
+		.cpp.colorEndVariance = params.colorEndVariance;
+		.cpp.alphaEnd = params.alphaEnd;
+		.cpp.alphaEndVariance = params.alphaEndVariance;
+		.cpp.rotStart = params.rotStart;
+		.cpp.rotStartVariance = params.rotStartVariance;
+		.cpp.rotVel = params.rotVel;
+		.cpp.rotVelVariance = params.rotVelVariance;
+		.cpp.scaleStart = params.scaleStart;
+		.cpp.scaleEnd = params.scaleEnd;
+		.cpp.scaleStartVariance = params.scaleStartVariance;
+		.cpp.scaleEndVariance = params.scaleEndVariance;
+		.cpp.blendSrc = params.blendSrc;
+		.cpp.blendDest = params.blendDest;
+		.cpp.blendEq = params.blendEq;
+
+		// handle textures
+		if ( ?params.texture )
+		{
+			.LoadTexture(params.texture);
+			.shader = g_particles.shaderTexture;
+		}
+		else
+		{
+			.tex = null;
+		}
+	};
+
+	Particles.LoadTexture = function(filename)
+	{
+		print(filename);
+
+		if( !system.FileExists(filename))
+		{
+			MessageBox("Error", filename + " does not exists!");
+			return;
+		}
+
+		.tex = Texture2d(filename);
+	};
+
+	Particles.SaveFile = function()
+	{
+		if ( .name == "UNTITLED" ) { return; }
+		
+		.SaveFileAs(.name);
+	};
+
+	Particles.SaveFileAs = function( filename )
+	{
+		if ( filename == "UNTITLED" ) { return; }
+
+		local exportTable = 
+		{
+			numParticlesPerEmission = .cpp.numParticlesPerEmission,
+			cooldown = .cpp.cooldown,
+			lifeSpan = .cpp.lifeSpan,
+			lifeSpanVariance = .cpp.lifeSpanVariance,
+			pos = .cpp.pos,
+			posVariance = .cpp.posVariance,
+			speed = .cpp.speed,
+			speedVariance = .cpp.speedVariance,
+			accel = .cpp.accel,
+			angle = .cpp.angle,
+			angleVariance = .cpp.angleVariance,
+			colorStart = .cpp.colorStart,
+			colorStartVariance = .cpp.colorStartVariance,
+			alphaStart = .cpp.alphaStart,
+			alphaStartVariance = .cpp.alphaStartVariance,
+			colorEnd = .cpp.colorEnd,
+			colorEndVariance = .cpp.colorEndVariance,
+			alphaEnd = .cpp.alphaEnd,
+			alphaEndVariance = .cpp.alphaEndVariance,
+			rotStart = .cpp.rotStart,
+			rotStartVariance = .cpp.rotStartVariance,
+			rotVel = .cpp.rotVel,
+			rotVelVariance = .cpp.rotVelVariance,
+			scaleStart = .cpp.scaleStart,
+			scaleEnd = .cpp.scaleEnd,
+			scaleStartVariance = .cpp.scaleStartVariance,
+			scaleEndVariance = .cpp.scaleEndVariance,
+			blendSrc = .cpp.blendSrc,
+			blendDest = .cpp.blendDest,
+			blendEq = .cpp.blendEq,
+			texture = null,
+		};
+
+		// handle textures
+		if ( ?.tex ) { exportTable.texture = .tex.Filename();	}
+
+		system.SaveTableToFile(exportTable, g_particles.directory + filename);
+	};
+
+	Particles.Update = function()
+	{		
+		while( true )
+		{
+			if ( .enable )
+			{
+				.cpp.Update(g_dt);
+
+				if ( .enableDraw )
+				{
+					RegisterDraw( .drawLayer, .Draw, this );
+				}
+			}
+
+			yield();
+		}
+	};
+
+	Particles.Init = function(a_numParticles)
+	{
+		if ( !?a_numParticles ) { a_numParticles = 512; }
+
+		Log("Initializing Particles count: " + a_numParticles);
+
+		.cpp = Particles2d(a_numParticles);
+		.threadId = this:thread(.Update);
+	};
+
+	Particles.Release = function()
+	{
+		threadKill(.threadId);
+		.threadId = 0;
+	};
+
+	Particles.RunGui = function()
+	{
+		.showGui = true;
+
+		fork
+		{
+			while(.showGui)
+			{
+				RegisterGui( "Particle Editor", .Gui, this, params);
+				yield();
+			}
+		}
+	};
+
+	Particles.Gui = function(params)
+	{
+		if ( Gui.Button("New") )
+		{
+			fork
+			{
+				Gui.Lock("Particle Editor");
+				local filename = TextInputBox("New Particle Name", g_particles.directory );
+
+				if ( filename ) 
+				{ 
+					filename += ".gm";
+
+					if ( system.FileExists( g_particles.directory + filename ) )
+					{
+						MessageBox("File Exists", g_particles.directory+filename + " already taken!" );
+					}
+					else
+					{
+						.name = filename; 
+
+						.Release();
+						.Init();
+						.SaveFile();
+					}
+				}
+
+				Gui.Unlock("Particle Editor");
+			}
+		}
+
+		Gui.SameLine();
+
+		if ( Gui.Button("Open") )
+		{
+			fork
+			{
+				Gui.Lock("Particle Editor");
+				local filename = FileChooser("Choose Particle System", g_particles.directory );
+				if ( filename ) 
+				{ 
+					.Release();
+					.Init();
+					.LoadFile(filename); 
+				}
+				Gui.Unlock("Particle Editor");
+			}
+		}
+
+		Gui.SameLine();
+
+		if ( Gui.Button("Save As") )
+		{
+			fork
+			{
+				Gui.Lock("Particle Editor");
+				local filename = TextInputBox("Save As Particle Name");
+
+				if ( filename )
+				{
+					filename += ".gm";
+
+					if ( system.FileExists( g_particles.directory + filename ) )
+					{
+						MessageBox("File Exists", g_particles.directory+filename + " already taken!" );
+					}
+					else
+					{
+						.SaveFileAs(filename);
+						MessageBox("File Saved", filename + " saved!");
+					}
+				}
+				Gui.Unlock("Particle Editor");
+			}
+		}		
+
+		Gui.SameLine();
+		if ( Gui.Button("Close") )
+		{
+			.showGui = false;
+		}
+
+		Gui.Header("File: \""+ .name +"\"");
+		if( .name != "UNTITLED" )
+		{
+			if ( Gui.Button("Save") )
+			{
+				.SaveFile();
+				MessageBox("File Saved", .name + " saved!");
+			}
+
+			Gui.SameLine();
+
+			if ( Gui.Button("Revert") ) 
+			{ 
+				fork
+				{
+					.Release();
+					.Init();
+					.LoadFile(.name); 
+				}
+			}
+		}
+
+		.useScreenCamera = Gui.CheckBox("Use Screen Space", .useScreenCamera );
+		Gui.FillBarFloat( "Update Time (ms)", .cpp.UpdateTime(), 0.0f, 16.0f );
+		Gui.FillBarInt( "Particle Reserve", .cpp.NumParticles(), 0, .cpp.NumParticlesMax() );
+
+		// spawn
+		Gui.Header("Spawn");
+		.cpp.numParticlesPerEmission = Gui.SliderInt( "Num Emitted", .cpp.numParticlesPerEmission, 0, 128 );
+		if ( Gui.Button("Emit") ) { .cpp.Emit(.cpp.numParticlesPerEmission); }
+		.cpp.cooldown = Gui.SliderFloat( "Cooldown", .cpp.cooldown, 0.0f, 10.0f );
+		.cpp.lifeSpan = Gui.SliderFloat( "Lifespan", .cpp.lifeSpan, 0.0f, 10.0f );
+		.cpp.lifeSpanVariance = Gui.SliderFloat( "Lifespan Variance", .cpp.lifeSpanVariance, 0.0f, 1.0f );
+
+		// positioning
+		Gui.Header("Position" );
+		.cpp.pos = Gui.SliderV2( "Position", .cpp.pos, v2(-1000.0f), v2(1000.0f) );
+		.cpp.posVariance = Gui.SliderV2( "Position Variance", .cpp.posVariance, v2(0.0f), v2(2000.0f) );
+		.cpp.speed = Gui.SliderFloat( "Speed", .cpp.speed, 0.0f, 500.0f );
+		.cpp.speedVariance = Gui.SliderFloat( "Speed Variance", .cpp.speedVariance, 0.0f, 1.0f );
+		.cpp.accel = Gui.SliderV2( "Acceleration", .cpp.accel, v2(-500.0f), v2(500.0f) );
+		.cpp.angle = Gui.SliderFloat( "Emit Angle", .cpp.angle, 0.0f, 2*PI );
+		.cpp.angleVariance = Gui.SliderFloat( "Emit Angle Variance", .cpp.angleVariance, 0.0f, 1.0f );
+
+		// color
+		Gui.Header("Color");
+		.cpp.colorStart = Gui.SliderRGB( "Color Start", .cpp.colorStart  );
+		.cpp.colorStartVariance = Gui.SliderRGB( "Color Start Variance", .cpp.colorStartVariance );
+		.cpp.alphaStart = Gui.SliderFloat( "Alpha Start", .cpp.alphaStart, 0.0f, 1.0f );
+		.cpp.alphaStartVariance = Gui.SliderFloat( "Alpha Start Variance", .cpp.alphaStartVariance, 0.0f, 1.0f );
+		Gui.Separator();
+		.cpp.colorEnd = Gui.SliderRGB( "Color End", .cpp.colorEnd );
+		.cpp.colorEndVariance = Gui.SliderRGB( "Color End Variance", .cpp.colorEndVariance );
+		.cpp.alphaEnd = Gui.SliderFloat( "Alpha End", .cpp.alphaEnd, 0.0f, 1.0f );
+		.cpp.alphaEndVariance = Gui.SliderFloat( "Alpha End Variance", .cpp.alphaEndVariance, 0.0f, 1.0f );
+
+		// Rotation
+		Gui.Header("Rotation");
+		.cpp.rotStart = Gui.SliderFloat( "Rotation Start", .cpp.rotStart, -5.0f, 5.0f );
+		.cpp.rotStartVariance = Gui.SliderFloat( "Rotation Start Variance", .cpp.rotStartVariance, 0.0f, 1.0f );
+		.cpp.rotVel = Gui.SliderFloat( "Rotation Velocity", .cpp.rotVel, -10.0f, 10.0f );
+		.cpp.rotVelVariance = Gui.SliderFloat( "Rotation Velocity Variance", .cpp.rotVelVariance, 0.0f, 1.0f );
+
+		// scale
+		Gui.Header("Scale");
+		.cpp.scaleStart = Gui.SliderV2( "Scale Start", .cpp.scaleStart, v2(0.0f), v2(100.0f) );
+		.cpp.scaleEnd = Gui.SliderV2( "Scale End", .cpp.scaleEnd, v2(0.0f), v2(100.0f) );
+		.cpp.scaleStartVariance = Gui.SliderFloat( "Scale Start Variance", .cpp.scaleStartVariance, 0.0f, 1.0f );
+		.cpp.scaleEndVariance = Gui.SliderFloat( "Scale End Variance", .cpp.scaleEndVariance, 0.0f, 1.0f );
+
+		// blending
+		Gui.Header("Blending");
+		Gui.Print("Source");
+		.cpp.blendSrc = Gui.SelectCustom( g_particles.blendFunc, .cpp.blendSrc );
+		Gui.Separator();
+		Gui.Print("Destination");
+		.cpp.blendDest = Gui.SelectCustom( g_particles.blendFunc, .cpp.blendDest );
+		Gui.Separator();
+		Gui.Print("Equation");
+		.cpp.blendEq = Gui.SelectCustom( g_particles.blendEq, .cpp.blendEq );
+
+		// textures
+		Gui.Header("Texture");
+		if ( ?.tex )
+		{
+			Gui.Print( .tex.Filename() );
+		}
+		else
+		{
+			Gui.Print("No Texture");
+		}
+		if ( Gui.Button("Load") )
+		{
+			fork
+			{
+				Gui.Lock("Particle Editor");
+				local filename = FileChooser("Choose Texture", g_particles.imgDirectory );
+				if ( filename ) 
+				{ 
+					.LoadTexture(g_particles.imgDirectory+filename); 
+					.shader = g_particles.shaderTexture;
+				}
+				Gui.Unlock("Particle Editor");	
+			}
+		}
+	};
+
+	Particles.Init(a_numParticles);
+	return Particles;
+};

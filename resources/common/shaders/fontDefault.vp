@@ -1,0 +1,12 @@
+attribute vec2 attrib_0;
+attribute vec2 attrib_1;
+
+varying mediump vec2 uv;
+
+uniform mat4 u_mvp;
+
+void main()
+{
+    gl_Position = u_mvp * vec4(attrib_0, 0.0, 1.0);
+	uv = attrib_1;
+}

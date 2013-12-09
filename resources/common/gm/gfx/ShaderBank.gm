@@ -1,0 +1,53 @@
+global MakeShaderBank = function()
+{
+	local ShaderBank = 
+	{
+		programs = {},
+	};
+
+	ShaderBank.Add = function( a_programName, a_vpName, a_fpName )
+	{
+		assert( !?.programs[a_programName] );
+
+		Log("Shader Bank added shader '" + a_programName + "' (" + a_vpName + ", " + a_fpName + ")" );
+
+		local program = ShaderProgram(a_vpName, a_fpName);
+		.programs[a_programName] = program;
+
+		
+		return program;
+	};
+
+	ShaderBank.GetCount = function()
+	{
+		return tableCount(.programs);
+	};
+
+	ShaderBank.Get = function( a_programName )
+	{
+		local program = .programs[a_programName];
+		assert( ?program );
+
+		return program;
+	};
+
+	ShaderBank.Gui = function()
+	{
+		Gui.Print("Count: " + tableCount(.programs) );
+		Gui.Header("Shaders");
+		Gui.DisplayTable(.programs, .tableSelector);
+	};
+
+	ShaderBank.Release = function()
+	{
+		.programs = null;
+	};
+
+	ShaderBank._Init = function()
+	{
+		.tableSelector = MakeGuiTableSelector();
+	};
+
+	ShaderBank._Init();
+	return ShaderBank;
+};

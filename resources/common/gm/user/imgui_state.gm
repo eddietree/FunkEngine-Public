@@ -1,0 +1,14 @@
+// auto-generated file
+global g_fileData =
+{
+    {
+        minimized = 0,
+        name = "Select Game",
+        pos = v2i(150, 710),
+    },
+    {
+        minimized = 1,
+        name = "Leap",
+        pos = v2i(300, 710),
+    },
+};

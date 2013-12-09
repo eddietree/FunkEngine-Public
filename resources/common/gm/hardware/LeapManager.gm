@@ -1,0 +1,524 @@
+global LeapGestureType =
+{
+	CIRCLE		= 0,
+	SWIPE		= 1,
+	SCREEN_TAP	= 2,
+	KEY_TAP		= 3,
+};
+
+global LeapGestureState =
+{
+	INVALID		=-1,
+	START		= 0,
+	UPDATE		= 1,
+	STOP		= 2,
+};
+
+local CreateLeapManager = function()
+{
+	local LeapManager =
+	{
+		draw_debug = false,
+		draw_debug_frustum = false,
+		draw_debug_gestures = true,
+
+		curr_frame = {},
+		prev_frame = {},
+
+		pool_hands = {},
+		pool_fingers = {},
+		pool_gestures = {},
+
+		// listeners
+		listeners = {},
+
+		device_props =  // will be populated in C++
+		{
+			frustum_x_axis_angle = 0.0f, // horizontal view angle
+			frustum_z_axis_angle = 0.0f,
+			frustum_y_height = 0.0f,
+			is_connected = false,
+		}, 
+
+		interaction_box =  // will be populated in C++
+		{
+			center = v3(0.0f), // horizontal view angle
+			dimen = v3(1.0f),
+		},
+	};
+
+	LeapManager.InitData = function()
+	{
+		local InitFinger = function()
+		{
+			.id = 0;
+			.hand_id = 0;
+			.hand_index = 0;
+			.finger_size = v2(0);
+			.dir = v3(0);
+			.tip_pos = v3(0);
+			.tip_pos_stabilized = v3(0);
+			.tip_vel = v3(0);
+			.age = 0.0f;
+			.dist_to_boundary = 0.0f;
+		};
+
+		local InitHand = function()
+		{
+			.id = 0;
+			.fingers = {};
+			.dir = v3(0);
+			.palm_normal = v3(0);
+			.palm_pos = v3(0);
+			.palm_vel  = v3(0);
+			.sphere_center = v3(0);
+			.sphere_radius = 0.0f;
+			.age = 0.0f;
+			.dist_to_boundary = 0.0f;
+		};
+
+		local InitGesture = function()
+		{
+			.id = 0;
+			// TODO
+		};
+
+		local InitFrame = function()
+		{
+			.hands = {};
+			.fingers = {};
+			.gestures = {};
+		};
+
+		local alloc_num_hands = 8;
+		local alloc_num_fingers = 20;
+		local alloc_num_gestures = 64;
+		
+		// init hands
+		for( i = 0; i < alloc_num_hands; i+=1 )
+		{
+			local hand = {};
+			hand:InitHand();
+			.pool_hands[i] = hand;
+		}
+
+		for( i = 0; i < alloc_num_fingers; i+=1 )
+		{
+			local finger = {};
+			finger:InitFinger();
+			.pool_fingers[i] = finger;
+		}
+
+		for( i = 0; i < alloc_num_gestures; i+=1 )
+		{
+			local gesture = {};
+			gesture:InitGesture();
+			.pool_gestures[i] = gesture;
+		}
+
+		// init frames
+		.curr_frame:InitFrame();
+		.prev_frame:InitFrame();
+	};
+
+	LeapManager.GetFrame = function()
+	{
+		return .curr_frame;
+	};
+
+	LeapManager.GetGesture = function( a_id )
+	{
+		return .curr_frame.gestures[a_id];
+	};
+
+	LeapManager.GetFinger = function( a_id )
+	{
+		return .curr_frame.fingers[a_id];
+	};
+
+	LeapManager.GetHand = function( a_id )
+	{
+		return .curr_frame.hands[a_id];
+	};
+
+	// normalize position into the interaction box
+	LeapManager.GetPosNormalize = function( a_pos )
+	{
+		local diff = a_pos - .interaction_box.center;
+		local half_dimen = .interaction_box.dimen*0.5f;
+		local result = diff / half_dimen;
+
+		return result;
+	};
+
+	LeapManager.RegisterGestureListener = function( a_gesture_type, a_gesture_state, a_callback_obj, a_callback_func, a_callback_param )
+	{
+		assert(?a_callback_func);
+		assert(?a_callback_obj);
+		assert( a_gesture_type >= LeapGestureType.CIRCLE );
+		assert( a_gesture_type <= LeapGestureType.KEY_TAP);
+
+		local listener = 
+		{
+			gesture_type = a_gesture_type,
+			gesture_state = a_gesture_state,
+			callback_func = a_callback_func,
+			callback_obj = a_callback_obj,
+			callback_param = a_callback_param,
+		};
+
+		.listeners[] = listener;
+	};
+
+	// remove all gesture listeners of an object
+	LeapManager.RemoveAllGestureListenersOfObj = function( a_callback_obj )
+	{
+		foreach( key and listener in .listeners )
+		{
+			if ( listener.callback_obj == a_callback_obj )
+			{
+				// swap last
+				.listeners[key] = .listeners[tableCount(.listeners)-1];
+				.listeners[tableCount(.listeners)-1] = null;
+			}
+		}
+	};
+
+	// remove a specific listener
+	LeapManager.RemoveGestureListener = function( a_callback_obj, a_callback_func )
+	{
+		foreach( key and listener in .listeners )
+		{
+			if ( listener.callback_obj == a_callback_obj && listener.callback_func == a_callback_func )
+			{
+				// swap last
+				.listeners[key] = .listeners[tableCount(.listeners)-1];
+				.listeners[tableCount(.listeners)-1] = null;
+			}
+		}
+	};
+
+	LeapManager.PreUpdateData = function()
+	{
+		// called before updating data
+		// recycle hands/fingers/gestures into pool to reduce allocs
+
+
+		// flip current and prev
+		local curr = .curr_frame;
+		.curr_frame = .prev_frame;
+		.prev_frame = curr;
+
+		// bring all hands back into the pool
+		foreach( key and hand in .curr_frame.hands )
+		{
+			assert(?hand);
+			.pool_hands[] = hand;
+		}
+
+		// fingers
+		foreach( key and finger in .curr_frame.fingers )
+		{
+			assert(?finger);
+			.pool_fingers[] = finger;
+		}
+
+		// gestures
+		foreach( key and gesture in .curr_frame.gestures )
+		{
+			assert(?gesture);
+			.pool_gestures[] = gesture;
+		}
+
+		tableClear(.curr_frame.hands);
+		tableClear(.curr_frame.fingers);
+		tableClear(.curr_frame.gestures);
+	};
+
+	LeapManager._OnTriggerGestureEvent = function(a_gesture, a_gesture_state )
+	{
+		foreach( listener in .listeners )
+		{
+			if ( listener.gesture_type == a_gesture.type && listener.gesture_state == a_gesture_state )
+			{
+				local func = listener.callback_func;
+				local obj = listener.callback_obj;
+				obj:func( a_gesture, listener.callback_param );
+			}
+		}
+	};
+
+	LeapManager.PostUpdateData = function()
+	{
+		// called after Leap (CPP) updates the data
+
+		foreach( prev_gesture in .prev_frame.gestures )
+		{
+			prev_gesture.found_in_current = false;
+		}
+
+		foreach( curr_gesture in .curr_frame.gestures )
+		{
+			// did we find the gesture in the previous frame?
+			local found = false;
+
+			foreach( prev_gesture in .prev_frame.gestures )
+			{
+				if (curr_gesture.id == prev_gesture.id )
+				{		
+					found = true;
+					prev_gesture.found_in_current = true;
+					break;
+				}
+			}
+
+			// if not found in previous frame, that means it just started
+			if (!found)
+			{
+				._OnTriggerGestureEvent(curr_gesture, LeapGestureState.START );
+			}
+		}
+
+		// go through previous gestures to see if current one has one
+		foreach( prev_gesture in .prev_frame.gestures )
+		{
+			// if gesture in previous frame does not exist in current
+			// the gesture has stopped
+			if (!prev_gesture.found_in_current)
+			{
+				._OnTriggerGestureEvent(prev_gesture, LeapGestureState.STOP );
+			}
+
+			prev_gesture.found_in_current = null;
+		}
+	};
+
+	LeapManager.Init = function()
+	{
+		.InitData();
+
+		fork id
+		{
+			while(true)
+			{
+                RegisterGui( "Leap", .Gui, this );
+				if ( .draw_debug )
+				{
+					RegisterDraw( DrawLayers.Debug, .DrawDebug, this );
+				}
+				
+				yield();
+			}
+		}
+	};
+
+    LeapManager.Gui = function()
+    {
+        Gui.Minimize();
+        
+        Gui.FillBarInt("Hands", tableCount(.curr_frame.hands), 0, 4 );
+        Gui.FillBarInt("Fingers", tableCount(.curr_frame.fingers), 0, 20 );
+		Gui.FillBarInt("Gestures", tableCount(.curr_frame.gestures), 0, 32 );
+		Gui.FillBarInt("Listeners", tableCount(.listeners), 0, 32 );
+
+		Gui.Separator();
+
+		Gui.Header("Interaction Box");
+		Gui.Print("Center: " + .interaction_box.center );
+		Gui.Print("Dimen: " + .interaction_box.dimen );
+
+		Gui.Separator();
+
+		.draw_debug = Gui.CheckBox( "Draw Debug", .draw_debug);
+		if ( .draw_debug )
+		{
+			.draw_debug_frustum = Gui.CheckBox( "Draw Frustum", .draw_debug_frustum);
+			.draw_debug_gestures = Gui.CheckBox( "Draw Gestures", .draw_debug_gestures);
+		}
+    };
+
+	LeapManager._DrawGestures = function( a_frame, a_alpha )
+	{
+		foreach( gesture in a_frame.gestures )
+		{
+			// circle type
+			if ( gesture.type == LeapGestureType.CIRCLE )
+			{
+				Imm.Color( Gfx.MAGENTA );
+				Imm.DrawDiskWire( gesture.center, gesture.normal, gesture.radius );
+				Imm.DrawArrow( gesture.center, gesture.center+gesture.normal );
+			}
+
+			// swipe
+			else if ( gesture.type == LeapGestureType.SWIPE )
+			{
+				Imm.Color( Gfx.CYAN );
+				Imm.DrawDiskWire( gesture.start_pos, gesture.dir, 0.3f );
+				Imm.DrawArrow( gesture.start_pos, gesture.pos );
+			}
+
+			// screen tap
+			else if ( gesture.type == LeapGestureType.SCREEN_TAP )
+			{
+				//Imm.Color( Gfx.CYAN );
+				//Imm.DrawDiskWire( gesture.pos, gesture.dir, 0.5f );
+
+				DrawUtil.EmitDiskWire( gesture.pos, gesture.dir, 0.5f, 1.5f, Gfx.YELLOW, 1.0f );
+				DrawUtil.EmitDiskWire( gesture.pos, gesture.dir, 0.1f, 0.3f, Gfx.YELLOW, 1.0f );
+			}
+
+			// key tap
+			else if ( gesture.type == LeapGestureType.KEY_TAP )
+			{
+				//Imm.Color( Gfx.CYAN );
+				//Imm.DrawDiskWire( gesture.pos, gesture.dir, 0.5f );
+
+				DrawUtil.EmitDiskWire( gesture.pos, gesture.dir, 0.5f, 1.5f, Gfx.CYAN, 1.0f );
+				DrawUtil.EmitDiskWire( gesture.pos, gesture.dir, 0.1f, 0.3f, Gfx.CYAN, 1.0f );
+			}
+		};
+	};
+
+	LeapManager.HasHands = function()
+	{
+		return tableCount(.GetFrame().hands) > 0;
+	};
+
+	LeapManager.GetOneHand = function()
+	{
+		local frame = .GetFrame();
+		local hand = tableFirst( frame.hands );
+		return hand;
+	};
+
+	LeapManager.GetGesturesOfType = function( a_gesture_type, a_result_table)
+	{
+		tableClear(a_result_table);
+		local frame = .GetFrame();
+
+		foreach( gesture in frame.gestures )
+		{
+			if ( gesture.type == a_gesture_type )
+			{
+				a_result_table[] = gesture;
+			}
+		}
+	};
+	
+	LeapManager._DrawHands = function( a_frame, a_alpha )
+	{
+		foreach( hand in a_frame.hands )
+		{
+			local palm_pos = hand.palm_pos;
+			local sphere_center = hand.sphere_center;
+			local sphere_radius = hand.sphere_radius;
+
+			// hand
+			Imm.Color( Gfx.RED, a_alpha );
+			Imm.DrawDisk( palm_pos, hand.palm_normal, 0.25f );
+			Imm.Color( Gfx.BLUE, a_alpha );
+			Imm.DrawDiskWire( palm_pos, hand.palm_normal, 0.5f );
+			Imm.DrawDiskWire( palm_pos, hand.palm_normal, 0.5f );
+
+			// center
+			Imm.Color( Gfx.BLUE, a_alpha );
+			Imm.DrawDiskWire( sphere_center, hand.palm_normal, sphere_radius );
+			Imm.DrawDiskWire( sphere_center, hand.palm_normal, 0.5f );
+			Imm.Color( Gfx.RED, a_alpha );
+			Imm.DrawDisk( sphere_center, hand.palm_normal, 0.3f );
+			Imm.Color( Gfx.GREEN, a_alpha );
+			Imm.DrawArrow( palm_pos, palm_pos+hand.palm_normal );
+			Imm.Color( Gfx.BLUE, a_alpha );
+			Imm.DrawArrow( palm_pos, palm_pos+hand.dir );
+
+			// hand projected down
+			local palm_pos_projected = v3( palm_pos.x, 0.0f, palm_pos.z );
+			Imm.Color( Gfx.RED, a_alpha* 0.5f );
+			Imm.DrawLine( palm_pos, palm_pos_projected );
+			Imm.Color( Gfx.BLUE, a_alpha );
+			Imm.DrawDisk( palm_pos_projected, v3(0.0f,1.0f,0.0f), 0.3f );
+
+			foreach( finger in hand.fingers )
+			{
+				local start = finger.tip_pos - finger.dir*1.5f;
+				local end = finger.tip_pos;
+
+				// fingers
+				Imm.Color( Gfx.RED, a_alpha );
+				Imm.DrawDisk( start, finger.dir, 0.1f );
+				Imm.Color( Gfx.BLUE, a_alpha );
+				Imm.DrawDiskWire( start, finger.dir, 0.2f );
+				Imm.DrawArrow( start, end );
+
+				// projected
+				local projected =  v3(start.x, 0.0f, start.z);
+				Imm.Color( Gfx.WHITE, a_alpha );
+				Imm.DrawLine( start, palm_pos );
+				Imm.Color( Gfx.WHITE, 0.1f * a_alpha );
+				Imm.DrawLine( start, projected );
+
+				Imm.Color( Gfx.RED, a_alpha );
+				Imm.DrawDiskWire( projected, v3(0.0f,1.0f,0.0f), 0.2f );
+			}
+		}
+	};
+
+	LeapManager._DrawFrustum = function()
+	{
+		if ( .device_props.frustum_x_axis_angle == 0.0f ) { return; }
+		
+		local center = v3(0.0f);
+		local x_angle_half = .device_props.frustum_x_axis_angle*0.5f;
+		local z_angle_half = .device_props.frustum_z_axis_angle*0.5f;
+
+		local dir = normalize(v3( sin(x_angle_half), cos(x_angle_half), sin(z_angle_half) ));
+		local intersect_t = (.device_props.frustum_y_height - center.y) / dir.y;
+		local intersect_pt = center + dir * intersect_t;
+		local intersect_len = length(intersect_pt-center);
+		
+		
+		local pos_0 = v3( dir.x, dir.y, dir.z )*intersect_len;
+		local pos_1 = v3( dir.x, dir.y,-dir.z )*intersect_len;
+		local pos_2 = v3(-dir.x, dir.y,-dir.z )*intersect_len;
+		local pos_3 = v3(-dir.x, dir.y, dir.z )*intersect_len;
+
+		Imm.Color( Gfx.RED );
+		Imm.DrawLine( center, pos_0 );
+		Imm.DrawLine( center, pos_1 );
+		Imm.DrawLine( center, pos_2 );
+		Imm.DrawLine( center, pos_3 );
+		Imm.DrawLine( pos_0, pos_1 );
+		Imm.DrawLine( pos_1, pos_2 );
+		Imm.DrawLine( pos_2, pos_3 );
+		Imm.DrawLine( pos_3, pos_0 );
+
+		Imm.Color( Gfx.MAGENTA );
+		Imm.DrawCubeWire( .interaction_box.dimen, .interaction_box.center );
+	};
+
+	LeapManager.DrawDebug = function()
+	{
+		//local cam = g_core.screenCam2d;
+        local cam = g_game.cam;		
+
+		cam.Begin();
+		
+		Imm.BeginDefaultShader();
+		Imm.BeginDraw();
+		
+		._DrawHands(.curr_frame, 1.0f);
+
+		if ( .draw_debug_gestures ) { ._DrawGestures(.curr_frame, 1.0f); } 
+		if ( .draw_debug_frustum ) { ._DrawFrustum(); }
+
+		Imm.EndDraw();
+		Imm.EndDefaultShader();
+		
+		cam.End();
+	};
+
+	LeapManager.Init();
+	return LeapManager;
+};
+
+global g_leap = CreateLeapManager();

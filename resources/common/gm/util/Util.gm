@@ -1,0 +1,100 @@
+global IsPtInRect = function( pt, rectPos, rectDimen )
+{
+	return pt.x > rectPos.x && pt.x < rectPos.x+rectDimen.x
+		&& pt.y > rectPos.y && pt.y < rectPos.y+rectDimen.y;
+};
+
+// used with Gui.DisplayTable()
+global MakeGuiTableSelector = function(numLevels)
+{
+	if ( !?numLevels )
+	{
+		numLevels = 8;
+	}
+
+	local tableSelector = array(numLevels);
+	for( i = 0; i < numLevels; i+=1 )
+	{
+		tableSelector[i] = -1;
+	}
+
+	return tableSelector;
+};
+
+global TableNthKey = function(table_, n)
+{
+	foreach (key and value in table_)
+	{
+		n -= 1;
+		if (n <= 0)
+		{
+			return key;
+		}
+	}
+
+	return null;
+};
+
+global TableRandomKey = function(table_)
+{
+	return TableNthKey(table_, randint(0, tableCount(table_)));
+};
+
+global TableRandomValue = function(table_)
+{
+	return table_[TableNthKey(table_, randint(0, tableCount(table_)))];
+};
+
+global TableAppend = function( a_lhs, a_rhs, a_out )
+{
+    if ( !?a_out )
+    {
+        a_out = table();
+    }
+
+    if ( ?a_lhs ) { foreach ( key and value in a_lhs ) { a_out[ key ] = value; } }
+    if ( ?a_rhs ) { foreach ( key and value in a_rhs ) { a_out[ key ] = value; } }
+
+    return a_out;
+};
+
+global TableDoesContainKey = function( a_table, a_key )
+{
+    foreach ( key and value in a_table )
+    {
+        if ( key == a_key )
+        {
+            return true;
+        }
+    }
+
+    return false;
+};
+
+global TableDoesContainValue = function( a_table, a_value )
+{
+    foreach ( key and value in a_table )
+    {
+        if ( value == a_value )
+        {
+            return true;
+        }
+    }
+
+    return false;
+};
+
+global DrawCoordSysDebug = function()
+{
+	Imm.BeginDefaultShader();
+	Imm.BeginDraw();
+	Gfx.Disable(Gfx.DEPTH_TEST);
+
+	Imm.Color( Gfx.WHITE);
+	Imm.DrawMayaPlane(10);
+	Imm.DrawBasisVectors();
+
+	Gfx.Enable(Gfx.DEPTH_TEST);
+	Imm.EndDraw();
+	Imm.EndDefaultShader();
+};

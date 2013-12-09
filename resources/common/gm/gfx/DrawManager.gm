@@ -1,0 +1,129 @@
+
+// NOTE: DrawLayers.gm clobbers these values, but the draw manager uses it for the init here
+//       just create a dummy layers here and let the init go later -- needs cleanup
+local AddDrawLayers = function()
+{
+	local val = 0;
+
+	.Clear				= val; val+=1;
+	.Scene				= val; val+=1;
+	.Scene_Debug		= val; val+=1;
+	.Screen_Debug		= val; val+=1;
+	
+	// DO NOT SET ME
+	._END				= val; val+=1;
+};
+
+global DrawLayers = {};
+DrawLayers:AddDrawLayers();
+
+global RegisterDraw = function( a_layer, a_func, a_obj, a_func_arg = null )
+{
+    assert( ?a_layer );
+    assert( ?a_func );
+
+	g_drawManager.Register(a_layer, a_func, a_obj, a_func_arg);
+};
+
+local CreateDrawManager = function()
+{
+	local DrawManager = {};
+
+	DrawManager.registerCache = table();
+
+	DrawManager.Init = function()
+	{
+		.DrawCalls = array(DrawLayers._END);
+
+		for ( i = 0; i < .DrawCalls.Size(); i += 1 )
+		{
+			.DrawCalls[i] = array();
+		}
+
+		.Clear();
+	};
+
+	DrawManager._PopCache = function()
+	{
+		local count = tableCount(.registerCache);
+		if (count <= 0)
+		{
+			local t = table();
+			.registerCache[t] = t;
+		}
+
+		foreach (k and v in .registerCache)
+		{
+			.registerCache[v] = null;
+			return v;
+		}
+
+		assert(false);
+	};
+
+	DrawManager._PushCache = function(item)
+	{
+		.registerCache[item] = item;
+	};
+
+	DrawManager.Register = function( a_layer, a_func, a_obj, a_func_arg = null )
+	{
+		assert( ?.DrawCalls[a_layer] );
+		assert( ?a_func );
+		assert( ?a_layer && a_layer >= 0 && a_layer < DrawLayers._END );
+
+		local obj = ._PopCache();
+
+		obj.Func = a_func;
+		obj.Func_Arg = a_func_arg;
+		obj.Obj = a_obj;
+
+		local layer = .DrawCalls[a_layer];
+		layer.Resize(layer.Size() + 1);
+		layer[layer.Size() - 1] = obj;
+	};
+
+	DrawManager.Clear = function()
+	{
+		for( i = 0; i < .DrawCalls.Size(); i += 1 )
+		{			
+			.DrawCalls[i].Resize(0);
+		}
+	};
+
+	DrawManager.Draw = function()
+	{
+		for( i = 0; i < .DrawCalls.Size(); i += 1 ) // each layer
+		{			
+			for ( j = 0; j < .DrawCalls[i].Size(); j += 1 ) // each draw call in layer
+			{
+				local callback = .DrawCalls[i][j];
+
+				local obj = callback.Obj;
+				local func = callback.Func;
+				local arg = callback.Func_Arg;
+
+				obj:func(arg);
+			}
+
+			for ( j = 0; j < .DrawCalls[i].Size(); j += 1 ) // clear draw call
+			{
+				local cached = .DrawCalls[i][j];
+
+				cached.obj = null;
+				cached.func = null;
+				cached.arg = null;
+
+				._PushCache( cached );
+			}
+
+			// clear layer
+			.DrawCalls[i].Resize(0);
+		}
+	};
+
+	return DrawManager;
+};
+
+global g_drawManager = CreateDrawManager();
+g_drawManager.Init();

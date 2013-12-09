@@ -1,0 +1,46 @@
+local MakeTween = function()
+{
+	local Tween = 
+	{
+	};
+
+	Tween.Update = function()
+	{
+		while( true )
+		{
+			yield();
+		}
+	};
+
+	Tween.To = function( ref, secs, data )
+	{
+		local obj = TweenTimeline();
+		obj.Insert(ref, secs, data);
+		obj.Run();
+
+		return obj;
+	};
+
+	Tween.MakeTimeline = function( ref, secs, data )
+	{
+		local obj = TweenTimeline();
+		obj.Insert(ref, secs, data);
+
+		return obj;
+	};
+
+	Tween.Init = function()
+	{	
+		.threadId = this:thread(.Update);
+	};
+
+	Tween.Release = function()
+	{
+		threadKill(.threadId);
+	};
+
+	Tween.Init();
+	return Tween;
+};
+
+global Tween = MakeTween();

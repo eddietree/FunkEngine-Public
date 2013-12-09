@@ -1,0 +1,115 @@
+global MakeStateMachine = function()
+{
+	local StateMachine = 
+	{
+		// collection of all states
+		states = {}, 
+
+		// current state
+		curr_state = null,
+		curr_state_name = "",
+	};
+
+	// get funcs
+	StateMachine.GetCurrState = function() { return .curr_state; };
+	StateMachine.GetCurrStateName = function() { return .curr_state_name; };
+
+	// change to a new state
+	StateMachine.ChangeTo = function( a_state_name )
+	{
+		local next_state_obj = .GetState(a_state_name);
+		local prev_state_obj = .curr_state;
+		local prev_state_name = .curr_state_name;
+
+		if ( ?.curr_state )
+		{
+			.curr_state.OnExit( a_state_name, next_state_obj );
+		}
+
+		// go towards next state
+		.curr_state_name = a_state_name;
+		.curr_state = next_state_obj;
+		.curr_state.time_duration = 0.0f;
+		.curr_state.OnEnter( prev_state_name, prev_state_obj );
+	};
+
+	// add a state into the machine
+	StateMachine.AddState = function(a_state_name, a_state_obj)
+	{
+		assert(!.HasState(a_state_name));
+		assert(?a_state_name);
+		assert(?a_state_obj);
+
+		.states[a_state_name] = a_state_obj;
+		a_state_obj.name = a_state_name;
+		a_state_obj.parent = this;
+	};
+
+	StateMachine.GetState = function(a_state_name)
+	{
+		local state = .states[a_state_name];
+		assert(?state);
+		return state;
+	};
+
+	StateMachine.HasState = function(a_state_name)
+	{
+		return ?.states[a_state_name];
+	};
+	
+	// need to call the state machine Update manually
+	StateMachine.Update = function()
+	{
+		if (?.curr_state)
+		{
+			.curr_state.Update();
+			.curr_state.time_duration += g_dt;
+		}
+	};
+
+	StateMachine.Release = function()
+	{
+		foreach( state in .states )
+		{
+			state.parent = null;
+			state.Release();
+		}
+
+		.states = null;
+		.curr_state = null;
+		.owner = null;
+	};
+
+	// must call this manually
+	StateMachine.Gui = function()
+	{
+		Gui.Header("State Machine");
+		Gui.Print("Current State: " + .curr_state_name);
+		Gui.Separator();
+		
+		foreach(name and state in .states)
+		{
+			if( Gui.Button(name) )
+			{
+				.ChangeTo(name);
+			}
+		}
+
+		// run curr states gui
+		if ( ?.curr_state )
+		{
+			if ( ?.curr_state.Gui )
+			{
+				Gui.Separator();
+				.curr_state.Gui();
+			}
+		}
+	};
+
+	StateMachine.Init = function()
+	{
+	};
+
+	StateMachine.Init();	
+	return StateMachine;
+};

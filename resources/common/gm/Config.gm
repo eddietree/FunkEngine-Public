@@ -1,0 +1,41 @@
+
+//
+// Compile order:
+// - Core.gm
+// - user_config.gm
+// - call UserConfigPreInclude()
+// - common/Config.gm
+// - common/Includes.gm
+// - game/Config.gm
+// - game/Includes.gm
+// - call UserConfigPostInclude()
+//
+
+assert(?DebugSettings);
+
+// enable logging via Log() in Debug.gm
+// note that this does not affect print()
+DebugSettings.LogEnabled = true;
+
+// skip funktronic splash screen on startup
+DebugSettings.SkipSplash = true;
+
+// show imgui (NOT USED)
+//DebugSettings.ShowDebugGui = true;
+
+// TODO: rename config_* and casing
+// TODO: this is set from cpp too (VirtualMachine.cpp), maybe avoid overlap
+// NOTE: i think we should phase out usage of this flag and replace with flags that enable/disable specific features
+//       and then have the final builds use a set of flags with the set of desired flags enabled
+// NOTE: this is because we will probably have multiple layers of 'debug'ness and 'final'ness
+
+global g_debug = !g_build_final;
+global g_config_show_debug_gui = g_debug;
+global g_config_show_profiler_gui = false;
+
+if ( g_build_final )
+{
+    DebugSettings.LogEnabled = true;
+    DebugSettings.SkipSplash = false;
+    //DebugSettings.ShowDebugGui = false;
+}
