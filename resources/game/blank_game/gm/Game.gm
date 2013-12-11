@@ -68,7 +68,6 @@ local MakeGame = function()
 		threadKill(.threadId);
 	};
 	
-	Game.Init();
 	return Game;
 };
 
