@@ -37,7 +37,7 @@ void checkSDLError(int line = -1)
 
 #define VALIDATE_SDL( _CALL ) { int val = (_CALL); CHECK(val==0, "SDL Error"); }
 
-const char *DEFAULT_WINDOW_TITLE = "Stella-111: A Cosmic Voyage";
+const char *DEFAULT_WINDOW_TITLE = "FunkEngine";
 
 namespace funk
 {	

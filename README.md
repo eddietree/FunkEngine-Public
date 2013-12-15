@@ -5,15 +5,25 @@ FunkEngine
 
 ## Info
 
-C++ game engine. Uses [GameMonkey](http://www.gmscript.com) for Scripting and OpenGL for rendering.
+Cross-platform C++ game engine. Can be used for video games or audioreactive projects. Uses [GameMonkey](http://www.gmscript.com) for Scripting and [OpenGL](http://open.gl/) for rendering. Has Fmod and OpenAL audio support.
 
-Supports: Windows (32-bit), Mac OSX (32-bit), and iOS platforms..
+Supported Platforms: Windows (32-bit), Mac OSX (32-bit), and iOS platforms.
+
+FunkEngine was used on such projects as
+- [Kyoto](http://funktroniclabs.com/kyoto)
+- [Lotus](http://funktroniclabs.com/lotus)
+- [Artifacts](http://illogictree.com/app/artifacts)
+- [Ballad of the Psychotropic Robots](http://illogictree.com/games/psychotropic/)
+- [Funktronic3000](http://illogictree.com/games/funktronic/)
+- ...and much more!
 
 
 
 ## Visual Studio Setup
 
-FunkEngine should build right out of the box, but in order for you to run it in Visual Studio, you need to set just a few **User Settings**.
+> Requires Visual Studio 2012
+
+FunkEngine should build right out of the box, but if it doesn't work when you run it the first time in Visual Studio, you need to set just a few **User Settings**.
 
 Right click on the Project "FunkEngine" ->Properties -> Configuration Properties -> Debugging
 

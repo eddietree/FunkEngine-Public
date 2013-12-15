@@ -2,7 +2,11 @@ local MakeGame = function()
 {
 	local Game = 
 	{
-		time = 0.0f
+		time = 0.0f,
+
+		is_drawing_konichiwa_text = true,
+		circle_color = Gfx.RED,
+		circle_radius = 80.0f,
 	};
 
 	Game.Draw = function()
@@ -10,13 +14,17 @@ local MakeGame = function()
 		Imm.BeginDefaultShader();
 		Imm.BeginDraw();
 
-		Imm.Color( Gfx.RED, 1.0f );
-        Imm.DrawCircle( g_core.screenDimen*0.5, 80.0f );
+		Imm.Color( .circle_color, 1.0f );
+        Imm.DrawCircle( g_core.screenDimen*0.5, .circle_radius );
 
 		Imm.EndDraw();
 		Imm.EndDefaultShader();
 
-		.font.PrintCenterInRect( "Konichiwa", v2(0.0f), g_core.screenDimen, Gfx.BLACK );
+		if ( .is_drawing_konichiwa_text )
+		{
+			local text_color = Gfx.BLACK;
+			.font.PrintCenterInRect( "Konichiwa", v2(0.0f), g_core.screenDimen, text_color );
+		}
 	};
 	
 	Game.ClearScreen = function()
@@ -43,12 +51,39 @@ local MakeGame = function()
 
 			.time += g_dt;
 
+			// register camera
 			RegisterDraw( DrawLayers.Scene_CamBegin, .DrawBegin, this );
-            RegisterDraw( DrawLayers.Scene_Debug, .DrawEnd, this );
+            RegisterDraw( DrawLayers.Scene_CamEnd, .DrawEnd, this );
+
             RegisterDraw( DrawLayers.Scene, .Draw, this);
 			RegisterDraw( DrawLayers.Clear, .ClearScreen, this);
+
+			RegisterGui( "Blank Game Gui", .Gui, this );
+
 			yield();
 		}
+	};
+
+	Game.Gui = function()
+	{
+		Gui.Print("Time: " + .time );
+
+		if ( Gui.Button("Gui Button") )
+		{
+			.circle_radius = 80.0f;
+			Tween.To( this, 1.5f, { circle_radius=150.0f, Ease=Ease.Elastic.Out });
+		}
+
+		.is_drawing_konichiwa_text = Gui.CheckBox( "Draw Konichiwa Text", .is_drawing_konichiwa_text );
+		Gui.Separator();
+		.circle_color = Gui.SliderHSV( "Circle Color (HSV)", .circle_color );
+
+		Gui.Header("Help");
+		Gui.Print("[F1] - Toggle Analytics");
+		Gui.Print("[F2] - Toggle Gui On/Off");
+		Gui.Print("[F3] - Profiler");
+		Gui.Print("[F5] - Reload All Scripts and Reboot VM");
+		Gui.Print("[F9] - GameMonkey Debugger");
 	};
 
 	Game.Init = function()

@@ -301,7 +301,7 @@ local CreateLeapManager = function()
 		{
 			while(true)
 			{
-                RegisterGui( "Leap", .Gui, this );
+                //RegisterGui( "Leap", .Gui, this );
 				if ( .draw_debug )
 				{
 					RegisterDraw( DrawLayers.Debug, .DrawDebug, this );
