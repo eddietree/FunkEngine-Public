@@ -222,6 +222,8 @@ gmThread::State gmThread::Sys_ExecuteMainLoop(gmVariable * a_return)
       return RUNNING;
   }
 
+  int instructions_count = 0;
+
 #endif // GMDEBUG_SUPPORT
 
   // make sure we have a stack frame
@@ -241,6 +243,17 @@ gmThread::State gmThread::Sys_ExecuteMainLoop(gmVariable * a_return)
   //
   for(;;)
   {
+
+#if GMDEBUG_SUPPORT
+
+	if (++instructions_count > 10000000)
+	{
+	  //GM_ASSERT(instructions_count < 10000000);
+      GMTHREAD_LOG("Thread hasn't yielded for 10 millions instructions. Execution halted.");
+      goto LabelException;
+	}
+
+#endif // GMDEBUG_SUPPORT
 
 #ifdef GM_CHECK_USER_BREAK_CALLBACK // This may be defined in gmConfig_p.h
     // Check external source to break execution with exception eg. Check for CTRL-BREAK
