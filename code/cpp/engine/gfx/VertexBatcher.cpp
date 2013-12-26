@@ -283,6 +283,64 @@ namespace funk
 		
 		PolygonEnd();
 	}
+
+	void VertexBatcher::DrawEllipse( const v2 center, const v2 radius, int segments )
+	{
+		const float delta_angle = 2.0f * PI / segments;
+		
+		PolygonBegin( PRIM_TRIANGLE_FAN );
+		
+		Vertex( center, v2(0.5f) );
+		
+		for ( int i = 0; i <= segments; ++i )
+		{
+			const float currAngle = delta_angle * i;
+			const v2 dir_normalized = unitCircle(currAngle);
+			const v2 uv = dir_normalized * 0.5f + v2(0.5f);
+
+			v2 pos = center + dir_normalized * radius;
+			Vertex( pos, uv );
+		}
+		
+		PolygonEnd();
+	}
+
+	void VertexBatcher::DrawEllipseTris( const v2 center, v2 radius, int segments )
+	{
+		const float delta_angle = 2.0f * PI / segments;
+		
+		PolygonBegin( PRIM_TRIANGLES );
+		
+		for ( int i = 0; i < segments; ++i )
+		{
+			float angle_0 = delta_angle * i;
+			float angle_1 = delta_angle * (i+1);
+			v2 pos_0 = center + unitCircle(angle_0) * radius;
+			v2 pos_1 = center + unitCircle(angle_1) * radius;
+
+			Vertex( center );
+			Vertex( pos_0 );
+			Vertex( pos_1 );
+		}
+		
+		PolygonEnd();
+	}
+	
+	void VertexBatcher::DrawEllipseWire( const v2 center, v2 radius, int segments )
+	{
+		float delta_angle = 2.0f * PI / segments;
+		
+		PolygonBegin( PRIM_LINE_LOOP );
+		
+		for ( int i = 0; i < segments; ++i )
+		{
+			float currAngle = delta_angle * i;
+			v2 pos = center + unitCircle(currAngle) * radius;
+			Vertex( pos.x, pos.y );
+		}
+		
+		PolygonEnd();
+	}
 	
 	void VertexBatcher::DrawDonut( const v2 center, float radius, float thickness, int segments /*= 32 */ )
 	{

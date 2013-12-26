@@ -69,6 +69,9 @@ namespace funk
 		void DrawCircle( const v2 center, float radius, int segments = 32 );
 		void DrawCircleTris( const v2 center, float radius, int segments = 32 ); // uses triangles instead of strip
 		void DrawCircleWire( const v2 center, float radius, int segments = 32 );
+		void DrawEllipse( const v2 center, const v2 radius, int segments = 32 );
+		void DrawEllipseTris( const v2 center, const v2 radius, int segments = 32 ); // uses triangles instead of strip
+		void DrawEllipseWire( const v2 center, const v2 radius, int segments = 32 );
 		void DrawDonut( const v2 center, float radius, float thickness, int segments = 32 );
 		void DrawDonutWire( const v2 center, float radius, float thickness, int segments = 32 );
 		void DrawArcDonut( const v2 center, float radius, float thickness, float startAngle, float endAngle, int segments = 32 );

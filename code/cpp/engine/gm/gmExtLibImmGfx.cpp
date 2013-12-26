@@ -526,6 +526,26 @@ struct gmfImmGfxLib
 		ImmGfx::Ref().DrawCircleWire( center, radius, numSegs);
 		return GM_OK;
 	}
+
+	GM_MEMFUNC_DECL(DrawEllipse)
+	{
+		GM_CHECK_V2_PARAM( center, 0 );
+		GM_CHECK_V2_PARAM( radius, 1);
+		GM_INT_PARAM( numSegs, 2, 32 );
+		
+		ImmGfx::Ref().DrawEllipse( center, radius, numSegs);
+		return GM_OK;
+	}
+	
+	GM_MEMFUNC_DECL(DrawEllipseWire)
+	{
+		GM_CHECK_V2_PARAM( center, 0 );
+		GM_CHECK_V2_PARAM( radius, 1);
+		GM_INT_PARAM( numSegs, 2, 32 );
+		
+		ImmGfx::Ref().DrawEllipseWire( center, radius, numSegs);
+		return GM_OK;
+	}
 	
 	GM_MEMFUNC_DECL(DrawDonut)
 	{
@@ -812,6 +832,8 @@ static gmFunctionEntry s_gmImmGfxLib[] =
 	GM_LIBFUNC_ENTRY(DrawScreenUV, ImmGfx)
 	GM_LIBFUNC_ENTRY(DrawCircle, ImmGfx)
 	GM_LIBFUNC_ENTRY(DrawCircleWire, ImmGfx)
+	GM_LIBFUNC_ENTRY(DrawEllipse, ImmGfx)
+	GM_LIBFUNC_ENTRY(DrawEllipseWire, ImmGfx)
 	GM_LIBFUNC_ENTRY(DrawDonut, ImmGfx)
 	GM_LIBFUNC_ENTRY(DrawDonutWire, ImmGfx)
 	GM_LIBFUNC_ENTRY(DrawArcDonut, ImmGfx)
