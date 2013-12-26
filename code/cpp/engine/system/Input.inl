@@ -1,6 +1,9 @@
 uint32_t Input::GetScanCode( const char * key ) const
 {
-	return m_mapStringKey.find(HashString(key))->second;
+	std::unordered_map< uint32_t, uint32_t >::const_iterator it = m_mapStringKey.find(HashString(key));
+	if (it == m_mapStringKey.end())
+		return 0;
+	return it->second;
 }
 
 bool Input::IsKeyDownInState( int iState, unsigned int key ) const
