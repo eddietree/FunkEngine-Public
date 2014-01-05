@@ -14,6 +14,7 @@ namespace funk
 		v2i		pos; // top-left position. rendered towards bottom-left
 		v2i		dimen;
 		v2i		dimenAutosize;		// autosize calculated
+		v2i		dimenAutosizePrev;	// from last frame
 		v2		scrollPos;
 		int		titleBarMinWidth;	// minimum title bar width
 		float	bgAlpha;

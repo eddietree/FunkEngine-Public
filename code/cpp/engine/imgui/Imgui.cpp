@@ -253,7 +253,7 @@ namespace funk
 	v2i	Imgui::GetWindowDimenAutoSize()
 	{
 		StrongHandle<ImguiWindow> &window = ImguiWorkingWindow();
-		return window->dimenAutosize;
+		return max(window->dimenAutosize, window->dimenAutosizePrev);
 	}
 
 	inline void ImmGfxBegin()
@@ -964,6 +964,7 @@ namespace funk
 		ImguiState().mouseRegionDimen = window->dimen - v2i(0, Imgui::TITLE_BAR_HEIGHT) - scroll_bar_dimen_offset;
 		
 		// determine size through imgui calls
+		window->dimenAutosizePrev = window->dimenAutosize;
 		window->dimenAutosize = v2i(0);
 		MoveDrawPosNextLine( v2i(0,WINDOW_INSIDE_PADDING-WIDGET_PADDING) );
 	}
@@ -1980,6 +1981,39 @@ namespace funk
 	{
 		if( ImguiIsMinized() ) return;
 		ImguiWorkingWindow()->scrollPos.y = saturate(y);
+	}
+
+	void Imgui::SetScrollToPosY( int y )
+	{
+		if( ImguiIsMinized() ) return;
+
+		StrongHandle<ImguiWindow> &window = ImguiWorkingWindow();
+
+		float scroll_range_y = (float)(max(window->dimenAutosize, window->dimenAutosizePrev) - window->dimen).y;
+
+		// focus at 40% height
+		float scroll_pos_y = (float)-(y - window->pos.y + window->dimen.y*0.40f);
+		window->scrollPos.y = saturate(scroll_pos_y / scroll_range_y);
+	}
+
+	void Imgui::SetScrollToPosYIfNotInView( int y, int pad_y )
+	{
+		if( ImguiIsMinized() ) return;
+
+		StrongHandle<ImguiWindow> &window = ImguiWorkingWindow();
+
+		// clamp padding for small windows
+		float pad = min(window->dimen.y * 0.5f, (float)pad_y);
+
+		float scroll_range_y = (float)(max(window->dimenAutosize, window->dimenAutosizePrev) - window->dimen).y;
+		float view_start_y = -window->scrollPos.y * scroll_range_y;
+
+		// focus at 40% height
+		if (y < view_start_y + pad || y > view_start_y + window->dimen.y - pad)
+		{
+			float scroll_pos_y = (float)-(y - window->pos.y + window->dimen.y*0.40f);
+			window->scrollPos.y = saturate(scroll_pos_y / scroll_range_y);
+		}
 	}
 
 	float Imgui::GetScrollY()

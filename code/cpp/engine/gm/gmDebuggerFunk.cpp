@@ -441,6 +441,8 @@ void gmDebuggerFunk::GuiSource()
 	int lineNumber = 1;
 	const char * textPos = source;
 	
+	v2i currentLineNumberPos = v2i(0,0);
+
 	// traverse each line
 	while( textPos-source < srcLen )
 	{
@@ -465,7 +467,11 @@ void gmDebuggerFunk::GuiSource()
 			Imgui::SetDrawPos(pos);
 			Imgui::ColorBlock(NULL, v3(0.2f, 0.6f, 0.2f), v2i(40,Imgui::FONT_HEIGHT + 2));
 			Imgui::SetDrawPos(pos);
+
+			if ( m_debugState.jumpToLineNumber || m_debugState.jumpToLineNumberIfNotInView )
+				currentLineNumberPos = pos;
 		}
+
 		Imgui::Print(lineCountBuffer);
 		Imgui::SameLine();
 		Imgui::Print(buffer);
@@ -473,22 +479,18 @@ void gmDebuggerFunk::GuiSource()
 		++lineNumber;
 	}
 
+	// fixme: setting scroll at this point create a 1 frame lag
+	// it is a bit of a tricky issue, but knowing the height of our text we could infer the Y position and set it before Imgui::Begin()
 	if ( m_debugState.jumpToLineNumber )
 	{
 		m_debugState.jumpToLineNumber = false;
 		m_debugState.jumpToLineNumberIfNotInView = false;
-		Imgui::SetScrollY( (float)m_debugState.lineNumber / max(1,(lineNumber-2)) );
+		Imgui::SetScrollToPosY( currentLineNumberPos.y );
 	}
 	else if ( m_debugState.jumpToLineNumberIfNotInView )
 	{
 		m_debugState.jumpToLineNumberIfNotInView = false;
-		const float view_y = Imgui::GetScrollY() * (Imgui::GetWindowDimenAutoSize() - Imgui::GetWindowDimen()).y;
-		const float line_y = (float)m_debugState.lineNumber / max(1,(lineNumber-2)) * Imgui::GetWindowDimenAutoSize().y;
-		const float pad = (float)Imgui::FONT_HEIGHT * 3;
-		if (line_y < view_y + pad || line_y > view_y + Imgui::GetWindowDimen().y - pad)
-		{
-			Imgui::SetScrollY( (float)m_debugState.lineNumber / max(1,(lineNumber-2)) );
-		}
+		Imgui::SetScrollToPosYIfNotInView( currentLineNumberPos.y, Imgui::FONT_HEIGHT * 4);
 	}
 
 	Imgui::End();

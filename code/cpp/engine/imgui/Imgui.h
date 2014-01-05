@@ -84,6 +84,8 @@ namespace funk
 		static v2i		GetWindowDimenAutoSize();
 		static void		SetScrollX( float x /*[0,1]*/);
 		static void		SetScrollY( float y /*[0,1]*/);
+		static void		SetScrollToPosY( int y );
+		static void		SetScrollToPosYIfNotInView( int y, int pad_y );
 		static float	GetScrollY();
 		static bool		IsWindowActive();
 		static bool		IsWidgetActive(int id);
