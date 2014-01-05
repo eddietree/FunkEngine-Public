@@ -434,14 +434,27 @@ void gmDebuggerFunk::GuiSource()
 			v2i(width, height) );
 	}
 
+	// Setup scroll immediately to avoid inelegant frame of lag when jumping to a new location
+	if ( m_debugState.jumpToLineNumber || m_debugState.jumpToLineNumberIfNotInView )
+	{
+		m_debugState.jumpToLineNumber = false;
+		m_debugState.jumpToLineNumberIfNotInView = false;
+		const int scroll_pos_y = Imgui::GetDrawPos().y + m_debugState.lineNumber * -(Imgui::FONT_HEIGHT + 4);
+		Imgui::SetScrollToPosY( scroll_pos_y );
+	}
+	else if ( m_debugState.jumpToLineNumberIfNotInView )
+	{
+		m_debugState.jumpToLineNumberIfNotInView = false;
+		const int scroll_pos_y = Imgui::GetDrawPos().y + m_debugState.lineNumber * -(Imgui::FONT_HEIGHT + 4);
+		Imgui::SetScrollToPosYIfNotInView( scroll_pos_y, Imgui::FONT_HEIGHT * 4 );
+	}
+
 	Imgui::SetSerializable(false);
 
 	int srcLen = strlen(source);
 	//int offset = 0;
 	int lineNumber = 1;
 	const char * textPos = source;
-	
-	v2i currentLineNumberPos = v2i(0,0);
 
 	// traverse each line
 	while( textPos-source < srcLen )
@@ -467,9 +480,6 @@ void gmDebuggerFunk::GuiSource()
 			Imgui::SetDrawPos(pos);
 			Imgui::ColorBlock(NULL, v3(0.2f, 0.6f, 0.2f), v2i(40,Imgui::FONT_HEIGHT + 2));
 			Imgui::SetDrawPos(pos);
-
-			if ( m_debugState.jumpToLineNumber || m_debugState.jumpToLineNumberIfNotInView )
-				currentLineNumberPos = pos;
 		}
 
 		Imgui::Print(lineCountBuffer);
@@ -477,20 +487,6 @@ void gmDebuggerFunk::GuiSource()
 		Imgui::Print(buffer);
 
 		++lineNumber;
-	}
-
-	// fixme: setting scroll at this point create a 1 frame lag
-	// it is a bit of a tricky issue, but knowing the height of our text we could infer the Y position and set it before Imgui::Begin()
-	if ( m_debugState.jumpToLineNumber )
-	{
-		m_debugState.jumpToLineNumber = false;
-		m_debugState.jumpToLineNumberIfNotInView = false;
-		Imgui::SetScrollToPosY( currentLineNumberPos.y );
-	}
-	else if ( m_debugState.jumpToLineNumberIfNotInView )
-	{
-		m_debugState.jumpToLineNumberIfNotInView = false;
-		Imgui::SetScrollToPosYIfNotInView( currentLineNumberPos.y, Imgui::FONT_HEIGHT * 4);
 	}
 
 	Imgui::End();

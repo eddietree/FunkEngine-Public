@@ -835,6 +835,22 @@ namespace funk
 		ImguiDrawLine(linePosStart, linePosEnd);
 	}
 
+	void ImguiRefreshScrollOffset( bool begin=false )
+	{
+		StrongHandle<ImguiWindow> window = ImguiWorkingWindow();
+
+		// figure out translation offset
+		v2i autoSize = begin ? window->dimenAutosize : window->dimenAutosizePrev;
+		int translateX = int(-(autoSize.x-window->dimen.x) * window->scrollPos.x); 
+		int translateY = int((autoSize.y-window->dimen.y) * window->scrollPos.y);
+		ImguiState().scrollOffset = -v2i(translateX, translateY);
+		
+		if ( !begin )
+			MVP::Ref().Model().Pop();
+		MVP::Ref().Model().Push();
+		MVP::Ref().Model().Translate( v2((float)translateX, (float)translateY) );
+	}
+
 	void Imgui::Begin( const char* name, v2i pos, v2i dimen )
 	{
 		assert( name );
@@ -951,13 +967,7 @@ namespace funk
 		RenderState::Ref().EnableFlag(FLAG_SCISSOR_TEST);
 		RenderState::Ref().SetScissor(window->pos.x, window->pos.y-window->dimen.y+scroll_bar_dimen_offset.y, max(0,window->dimen.x-1-scroll_bar_dimen_offset.x), max(0,window->dimen.y-Imgui::TITLE_BAR_HEIGHT-1-scroll_bar_dimen_offset.y) );
 
-		// figure out translation offset
-		int translateX = int(-(window->dimenAutosize.x-window->dimen.x) * window->scrollPos.x); 
-		int translateY = int((window->dimenAutosize.y-window->dimen.y) * window->scrollPos.y);
-		ImguiState().scrollOffset = -v2i(translateX, translateY);
-		
-		MVP::Ref().Model().Push();
-		MVP::Ref().Model().Translate( v2((float)translateX, (float)translateY) );
+		ImguiRefreshScrollOffset( true );
 		
 		// where the mouse can interact
 		ImguiState().mouseRegionStart = window->pos - v2i(0, Imgui::TITLE_BAR_HEIGHT);
@@ -1975,12 +1985,14 @@ namespace funk
 	{
 		if( ImguiIsMinized() ) return;
 		ImguiWorkingWindow()->scrollPos.x = saturate(x);
+		ImguiRefreshScrollOffset();
 	}
 
 	void Imgui::SetScrollY( float y )
 	{
 		if( ImguiIsMinized() ) return;
 		ImguiWorkingWindow()->scrollPos.y = saturate(y);
+		ImguiRefreshScrollOffset();
 	}
 
 	void Imgui::SetScrollToPosY( int y )
@@ -1994,6 +2006,7 @@ namespace funk
 		// focus at 40% height
 		float scroll_pos_y = (float)-(y - window->pos.y + window->dimen.y*0.40f);
 		window->scrollPos.y = saturate(scroll_pos_y / scroll_range_y);
+		ImguiRefreshScrollOffset();
 	}
 
 	void Imgui::SetScrollToPosYIfNotInView( int y, int pad_y )
@@ -2014,12 +2027,7 @@ namespace funk
 			float scroll_pos_y = (float)-(y - window->pos.y + window->dimen.y*0.40f);
 			window->scrollPos.y = saturate(scroll_pos_y / scroll_range_y);
 		}
-	}
-
-	float Imgui::GetScrollY()
-	{
-		if( ImguiIsMinized() ) return 0.0f;
-		return ImguiWorkingWindow()->scrollPos.y;
+		ImguiRefreshScrollOffset();
 	}
 
 	bool Imgui::IsMinimized()

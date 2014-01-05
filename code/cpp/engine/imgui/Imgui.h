@@ -86,7 +86,6 @@ namespace funk
 		static void		SetScrollY( float y /*[0,1]*/);
 		static void		SetScrollToPosY( int y );
 		static void		SetScrollToPosYIfNotInView( int y, int pad_y );
-		static float	GetScrollY();
 		static bool		IsWindowActive();
 		static bool		IsWidgetActive(int id);
 		static bool		IsWorkingWindowNew();
