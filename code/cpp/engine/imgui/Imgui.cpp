@@ -208,6 +208,22 @@ namespace funk
 		ImguiManager::Get()->SetActiveWidgetId(id);
 	}
 
+	v2i	Imgui::GetDrawPos()
+	{
+		return ImguiState().drawPos;
+	}
+
+	void Imgui::SetDrawPos( v2i pos )
+	{
+		StrongHandle<ImguiWindow> &window = ImguiWorkingWindow();
+
+		ImguiState().drawPosPrev = ImguiState().drawPos;
+		ImguiState().drawPos = pos;
+
+		window->dimenAutosize.x = max( window->dimenAutosize.x, ImguiState().drawPos.x - window->pos.x );
+		window->dimenAutosize.y = max( window->dimenAutosize.y, window->pos.y - ImguiState().drawPos.y );
+	}
+
 	void Imgui::MoveDrawPosBy( v2i dimen )
 	{
 		StrongHandle<ImguiWindow> &window = ImguiWorkingWindow();
@@ -226,6 +242,18 @@ namespace funk
 
 		Imgui::MoveDrawPosBy( dimen + v2i(0,WIDGET_PADDING) );
 		ImguiState().drawPos.x = window->pos.x + WINDOW_INSIDE_PADDING + TAB_WIDTH*ImguiState().numTabs;
+	}
+
+	v2i	Imgui::GetWindowDimen()
+	{
+		StrongHandle<ImguiWindow> &window = ImguiWorkingWindow();
+		return window->dimen;
+	}
+
+	v2i	Imgui::GetWindowDimenAutoSize()
+	{
+		StrongHandle<ImguiWindow> &window = ImguiWorkingWindow();
+		return window->dimenAutosize;
 	}
 
 	inline void ImmGfxBegin()
@@ -1628,7 +1656,8 @@ namespace funk
 	{
 		if( ImguiIsMinized() ) return;
 
-		Imgui::Print( name );
+		if (name)
+			Imgui::Print( name );
 
 		// draw block
 		v2i pos = ImguiState().drawPos;
@@ -1951,6 +1980,12 @@ namespace funk
 	{
 		if( ImguiIsMinized() ) return;
 		ImguiWorkingWindow()->scrollPos.y = saturate(y);
+	}
+
+	float Imgui::GetScrollY()
+	{
+		if( ImguiIsMinized() ) return 0.0f;
+		return ImguiWorkingWindow()->scrollPos.y;
 	}
 
 	bool Imgui::IsMinimized()

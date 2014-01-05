@@ -76,10 +76,15 @@ namespace funk
 		static void		CubicSpline2d( StrongHandle<CubicSpline2d> lineGraph, v2 minPos, v2 maxPos, v2i dimen=v2i(300) );
 
 		// advanced features
+		static v2i		GetDrawPos();
+		static void		SetDrawPos( v2i pos );
 		static void		MoveDrawPosBy( v2i dimen );
 		static void		MoveDrawPosNextLine( v2i dimen );
+		static v2i		GetWindowDimen();
+		static v2i		GetWindowDimenAutoSize();
 		static void		SetScrollX( float x /*[0,1]*/);
 		static void		SetScrollY( float y /*[0,1]*/);
+		static float	GetScrollY();
 		static bool		IsWindowActive();
 		static bool		IsWidgetActive(int id);
 		static bool		IsWorkingWindowNew();

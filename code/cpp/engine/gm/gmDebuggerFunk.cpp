@@ -218,6 +218,7 @@ void gmDebuggerFunk::BeginSession()
 	machine->GetGlobals()->Set(machine, "g_debugger_on", gmVariable(1));
 
 	m_debugState.jumpToLineNumber = true;
+	m_debugState.jumpToLineNumberIfNotInView = false;
 
 	VirtualMachine::Get()->GetConsole().Enable(true);
 	VirtualMachine::Get()->GetConsole().Log("Begin debugger session");
@@ -308,6 +309,7 @@ void gmDebuggerFunk::ReceiveMsg( const void * a_command, int &a_len )
 			if ( !IsDebugging() ) BeginSession();
 
 			m_debugState.jumpToLineNumber = (m_debugState.threadId != threadId) || (m_debugState.sourceId != sourceId);
+			m_debugState.jumpToLineNumberIfNotInView = (m_debugState.threadId != threadId) || (m_debugState.sourceId != sourceId) || (m_debugState.lineNumber != lineNumber);
 			m_debugState.threadId = threadId;
 			m_debugState.sourceId = sourceId;
 			m_debugState.lineNumber = lineNumber;
@@ -456,11 +458,17 @@ void gmDebuggerFunk::GuiSource()
 		char lineCountBuffer[8];
 		sprintf(lineCountBuffer, "%4d:", lineNumber);
 
-		if ( lineNumber == m_debugState.lineNumber ) Imgui::Separator();
+		if ( lineNumber == m_debugState.lineNumber )
+		{
+			v2i pos = Imgui::GetDrawPos();
+			Imgui::ColorBlock(NULL, v3(0.2f, 0.4f, 0.2f), v2i(Imgui::GetWindowDimenAutoSize().x - pos.x - 10, Imgui::FONT_HEIGHT + 2));
+			Imgui::SetDrawPos(pos);
+			Imgui::ColorBlock(NULL, v3(0.2f, 0.6f, 0.2f), v2i(40,Imgui::FONT_HEIGHT + 2));
+			Imgui::SetDrawPos(pos);
+		}
 		Imgui::Print(lineCountBuffer);
 		Imgui::SameLine();
 		Imgui::Print(buffer);
-		if ( lineNumber == m_debugState.lineNumber ) Imgui::Separator();
 
 		++lineNumber;
 	}
@@ -468,7 +476,19 @@ void gmDebuggerFunk::GuiSource()
 	if ( m_debugState.jumpToLineNumber )
 	{
 		m_debugState.jumpToLineNumber = false;
+		m_debugState.jumpToLineNumberIfNotInView = false;
 		Imgui::SetScrollY( (float)m_debugState.lineNumber / max(1,(lineNumber-2)) );
+	}
+	else if ( m_debugState.jumpToLineNumberIfNotInView )
+	{
+		m_debugState.jumpToLineNumberIfNotInView = false;
+		const float view_y = Imgui::GetScrollY() * (Imgui::GetWindowDimenAutoSize() - Imgui::GetWindowDimen()).y;
+		const float line_y = (float)m_debugState.lineNumber / max(1,(lineNumber-2)) * Imgui::GetWindowDimenAutoSize().y;
+		const float pad = (float)Imgui::FONT_HEIGHT * 3;
+		if (line_y < view_y + pad || line_y > view_y + Imgui::GetWindowDimen().y - pad)
+		{
+			Imgui::SetScrollY( (float)m_debugState.lineNumber / max(1,(lineNumber-2)) );
+		}
 	}
 
 	Imgui::End();
