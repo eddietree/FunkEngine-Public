@@ -218,6 +218,7 @@ void gmDebuggerFunk::BeginSession()
 	machine->GetGlobals()->Set(machine, "g_debugger_on", gmVariable(1));
 
 	m_debugState.jumpToLineNumber = true;
+	m_debugState.jumpToLineNumberIfNotInView = false;
 
 	VirtualMachine::Get()->GetConsole().Enable(true);
 	VirtualMachine::Get()->GetConsole().Log("Begin debugger session");
@@ -308,6 +309,7 @@ void gmDebuggerFunk::ReceiveMsg( const void * a_command, int &a_len )
 			if ( !IsDebugging() ) BeginSession();
 
 			m_debugState.jumpToLineNumber = (m_debugState.threadId != threadId) || (m_debugState.sourceId != sourceId);
+			m_debugState.jumpToLineNumberIfNotInView = (m_debugState.threadId != threadId) || (m_debugState.sourceId != sourceId) || (m_debugState.lineNumber != lineNumber);
 			m_debugState.threadId = threadId;
 			m_debugState.sourceId = sourceId;
 			m_debugState.lineNumber = lineNumber;
@@ -432,13 +434,28 @@ void gmDebuggerFunk::GuiSource()
 			v2i(width, height) );
 	}
 
+	// Setup scroll immediately to avoid inelegant frame of lag when jumping to a new location
+	if ( m_debugState.jumpToLineNumber || m_debugState.jumpToLineNumberIfNotInView )
+	{
+		m_debugState.jumpToLineNumber = false;
+		m_debugState.jumpToLineNumberIfNotInView = false;
+		const int scroll_pos_y = Imgui::GetDrawPos().y + m_debugState.lineNumber * -(Imgui::FONT_HEIGHT + 4);
+		Imgui::SetScrollToCenterOnPosY( scroll_pos_y );
+	}
+	else if ( m_debugState.jumpToLineNumberIfNotInView )
+	{
+		m_debugState.jumpToLineNumberIfNotInView = false;
+		const int scroll_pos_y = Imgui::GetDrawPos().y + m_debugState.lineNumber * -(Imgui::FONT_HEIGHT + 4);
+		Imgui::SetScrollToCenterOnPosY( scroll_pos_y, Imgui::FONT_HEIGHT * 4 );
+	}
+
 	Imgui::SetSerializable(false);
 
 	int srcLen = strlen(source);
 	//int offset = 0;
 	int lineNumber = 1;
 	const char * textPos = source;
-	
+
 	// traverse each line
 	while( textPos-source < srcLen )
 	{
@@ -456,19 +473,20 @@ void gmDebuggerFunk::GuiSource()
 		char lineCountBuffer[8];
 		sprintf(lineCountBuffer, "%4d:", lineNumber);
 
-		if ( lineNumber == m_debugState.lineNumber ) Imgui::Separator();
+		if ( lineNumber == m_debugState.lineNumber )
+		{
+			v2i pos = Imgui::GetDrawPos();
+			Imgui::ColorBlock(NULL, v3(0.2f, 0.4f, 0.2f), v2i(Imgui::GetWindowDimenAutoSize().x - pos.x - 10, Imgui::FONT_HEIGHT + 2));
+			Imgui::SetDrawPos(pos);
+			Imgui::ColorBlock(NULL, v3(0.2f, 0.6f, 0.2f), v2i(40,Imgui::FONT_HEIGHT + 2));
+			Imgui::SetDrawPos(pos);
+		}
+
 		Imgui::Print(lineCountBuffer);
 		Imgui::SameLine();
 		Imgui::Print(buffer);
-		if ( lineNumber == m_debugState.lineNumber ) Imgui::Separator();
 
 		++lineNumber;
-	}
-
-	if ( m_debugState.jumpToLineNumber )
-	{
-		m_debugState.jumpToLineNumber = false;
-		Imgui::SetScrollY( (float)m_debugState.lineNumber / max(1,(lineNumber-2)) );
 	}
 
 	Imgui::End();

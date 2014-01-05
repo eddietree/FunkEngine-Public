@@ -63,7 +63,7 @@ namespace funk
 
 	const int IMGUI_MOUSE_PRESS_BTN = 1;
 
-	const float MOUSEWHEEL_SCROLL_DELTA = 100.0f;
+	const int MOUSEWHEEL_SCROLL_DELTA = 100;
 
 	enum ButtonState
 	{
@@ -208,6 +208,22 @@ namespace funk
 		ImguiManager::Get()->SetActiveWidgetId(id);
 	}
 
+	v2i	Imgui::GetDrawPos()
+	{
+		return ImguiState().drawPos;
+	}
+
+	void Imgui::SetDrawPos( v2i pos )
+	{
+		StrongHandle<ImguiWindow> &window = ImguiWorkingWindow();
+
+		ImguiState().drawPosPrev = ImguiState().drawPos;
+		ImguiState().drawPos = pos;
+
+		window->dimenAutosize.x = max( window->dimenAutosize.x, ImguiState().drawPos.x - window->pos.x );
+		window->dimenAutosize.y = max( window->dimenAutosize.y, window->pos.y - ImguiState().drawPos.y );
+	}
+
 	void Imgui::MoveDrawPosBy( v2i dimen )
 	{
 		StrongHandle<ImguiWindow> &window = ImguiWorkingWindow();
@@ -226,6 +242,18 @@ namespace funk
 
 		Imgui::MoveDrawPosBy( dimen + v2i(0,WIDGET_PADDING) );
 		ImguiState().drawPos.x = window->pos.x + WINDOW_INSIDE_PADDING + TAB_WIDTH*ImguiState().numTabs;
+	}
+
+	v2i	Imgui::GetWindowDimen()
+	{
+		StrongHandle<ImguiWindow> &window = ImguiWorkingWindow();
+		return window->dimen;
+	}
+
+	v2i	Imgui::GetWindowDimenAutoSize()
+	{
+		StrongHandle<ImguiWindow> &window = ImguiWorkingWindow();
+		return max(window->dimenAutosize, window->dimenAutosizePrev);
 	}
 
 	inline void ImmGfxBegin()
@@ -544,16 +572,16 @@ namespace funk
 			// mouse scroll
 			if ( !window->autosize )
 			{
-				const float scrollDelta = MOUSEWHEEL_SCROLL_DELTA / max(1,window->dimenAutosize.y);
+				const int scrollDelta = MOUSEWHEEL_SCROLL_DELTA;
 
 				if ( ImguiDidMouseWheelGoDown(0) )
 				{
-					window->scrollPos.y = min( window->scrollPos.y+scrollDelta, 1.0f );
+					window->scrollPos.y = min( window->scrollPos.y+scrollDelta, max(1,window->dimenAutosize.y-window->dimen.y) );
 				}
 
 				else if ( ImguiDidMouseWheelGoDown(1) )
 				{
-					window->scrollPos.y = max( window->scrollPos.y-scrollDelta, 0.0f );
+					window->scrollPos.y = max( window->scrollPos.y-scrollDelta, 0 );
 				}
 			}
 		}
@@ -587,7 +615,7 @@ namespace funk
 		// don't show bar if not needed
 		if ( percentShown >= 1.0f ) 
 		{	
-			window->scrollPos.x = 0.0f;
+			window->scrollPos.x = 0;
 			return false;
 		}
 
@@ -601,7 +629,8 @@ namespace funk
 		v2i sliderDimen = v2i( (int)(barDimen.x*percentShown), SCROLL_BAR_SIZE );
 		int sliderPosMinX = barPos.x;
 		int sliderPosMaxX = barPos.x + barDimen.x - sliderDimen.x;
-		v2i sliderPos = v2i( (int)lerp((float)sliderPosMinX, (float)sliderPosMaxX, window->scrollPos.x), barPos.y );
+		float scrollRatioX = saturate((float)window->scrollPos.x / (max(window->dimenAutosize.x, window->dimenAutosizePrev.x) - window->dimen.x));
+		v2i sliderPos = v2i( (int)lerp((float)sliderPosMinX, (float)sliderPosMaxX, scrollRatioX), barPos.y );
 
 		const int mouseX = ImguiGetMousePos().x;
 
@@ -638,8 +667,9 @@ namespace funk
 			{
 				int xMin = barPos.x + ImguiState().data.i;
 				int xMax = barPos.x + barDimen.x - sliderDimen.x + ImguiState().data.i;
-
-				window->scrollPos.x = saturate(((float)mouseX - xMin)/(xMax-xMin));		
+				
+				scrollRatioX = saturate(((float)mouseX - xMin)/(xMax-xMin));
+				window->scrollPos.x = (int)(scrollRatioX * (max(window->dimenAutosize.x, window->dimenAutosizePrev.x) - window->dimen.x));
 			}
 		}
 
@@ -674,7 +704,7 @@ namespace funk
 		// don't show bar if not needed
 		if ( percentShown >= 1.0f ) 
 		{	
-			window->scrollPos.y = 0.0f;
+			window->scrollPos.y = 0;
 			return false;
 		}
 
@@ -688,7 +718,8 @@ namespace funk
 		v2i sliderDimen = v2i( SCROLL_BAR_SIZE, (int)(barDimen.y*percentShown) );
 		int sliderPosMinY = barPos.y;
 		int sliderPosMaxY = barPos.y - barDimen.y + sliderDimen.y;
-		v2i sliderPos = v2i( barPos.x, (int)lerp((float)sliderPosMinY, (float)sliderPosMaxY, window->scrollPos.y) );
+		float scrollRatioY = saturate((float)window->scrollPos.y / (max(window->dimenAutosize.y, window->dimenAutosizePrev.y) - window->dimen.y));
+		v2i sliderPos = v2i( barPos.x, (int)lerp((float)sliderPosMinY, (float)sliderPosMaxY, scrollRatioY) );
 
 		const int mouseY = ImguiGetMousePos().y;
 
@@ -726,7 +757,8 @@ namespace funk
 				int yMin = barPos.y - ImguiState().data.i;
 				int yMax = barPos.y - barDimen.y + sliderDimen.y - ImguiState().data.i;
 
-				window->scrollPos.y = saturate(((float)mouseY - yMin)/(yMax-yMin));		
+				scrollRatioY = saturate(((float)mouseY - yMin)/(yMax-yMin));		
+				window->scrollPos.y = (int)(scrollRatioY * (max(window->dimenAutosize.y, window->dimenAutosizePrev.y) - window->dimen.y));
 			}
 		}
 
@@ -805,6 +837,21 @@ namespace funk
 		v2i linePosEnd = pos + v2i(SCROLL_BAR_SIZE-LINE_PADDING,-LINE_PADDING);
 		ImguiColor(COLOR_WHITE, ImguiIsWidgetActive(id) ? 0.85f : 0.5f );
 		ImguiDrawLine(linePosStart, linePosEnd);
+	}
+
+	void ImguiRefreshScrollOffset( bool begin=false )
+	{
+		StrongHandle<ImguiWindow> window = ImguiWorkingWindow();
+
+		// figure out translation offset
+		int translateX = -window->scrollPos.x; 
+		int translateY = window->scrollPos.y;
+		ImguiState().scrollOffset = -v2i(translateX, translateY);
+		
+		if ( !begin )
+			MVP::Ref().Model().Pop();
+		MVP::Ref().Model().Push();
+		MVP::Ref().Model().Translate( v2((float)translateX, (float)translateY) );
 	}
 
 	void Imgui::Begin( const char* name, v2i pos, v2i dimen )
@@ -923,19 +970,14 @@ namespace funk
 		RenderState::Ref().EnableFlag(FLAG_SCISSOR_TEST);
 		RenderState::Ref().SetScissor(window->pos.x, window->pos.y-window->dimen.y+scroll_bar_dimen_offset.y, max(0,window->dimen.x-1-scroll_bar_dimen_offset.x), max(0,window->dimen.y-Imgui::TITLE_BAR_HEIGHT-1-scroll_bar_dimen_offset.y) );
 
-		// figure out translation offset
-		int translateX = int(-(window->dimenAutosize.x-window->dimen.x) * window->scrollPos.x); 
-		int translateY = int((window->dimenAutosize.y-window->dimen.y) * window->scrollPos.y);
-		ImguiState().scrollOffset = -v2i(translateX, translateY);
-		
-		MVP::Ref().Model().Push();
-		MVP::Ref().Model().Translate( v2((float)translateX, (float)translateY) );
+		ImguiRefreshScrollOffset( true );
 		
 		// where the mouse can interact
 		ImguiState().mouseRegionStart = window->pos - v2i(0, Imgui::TITLE_BAR_HEIGHT);
 		ImguiState().mouseRegionDimen = window->dimen - v2i(0, Imgui::TITLE_BAR_HEIGHT) - scroll_bar_dimen_offset;
 		
 		// determine size through imgui calls
+		window->dimenAutosizePrev = window->dimenAutosize;
 		window->dimenAutosize = v2i(0);
 		MoveDrawPosNextLine( v2i(0,WINDOW_INSIDE_PADDING-WIDGET_PADDING) );
 	}
@@ -1628,7 +1670,8 @@ namespace funk
 	{
 		if( ImguiIsMinized() ) return;
 
-		Imgui::Print( name );
+		if (name)
+			Imgui::Print( name );
 
 		// draw block
 		v2i pos = ImguiState().drawPos;
@@ -1941,16 +1984,51 @@ namespace funk
 		window->locked = false;
 	}
 
-	void Imgui::SetScrollX( float x )
+	void Imgui::SetScrollRatioY( float ry )
 	{
 		if( ImguiIsMinized() ) return;
-		ImguiWorkingWindow()->scrollPos.x = saturate(x);
+
+		StrongHandle<ImguiWindow> &window = ImguiWorkingWindow();
+
+		ImguiWorkingWindow()->scrollPos.y = (int)(ry * (max(window->dimenAutosize.y, window->dimenAutosizePrev.y) - window->dimen.y));
+		ImguiRefreshScrollOffset();
 	}
 
-	void Imgui::SetScrollY( float y )
+	void Imgui::SetScrollPosX( int x )
 	{
 		if( ImguiIsMinized() ) return;
-		ImguiWorkingWindow()->scrollPos.y = saturate(y);
+
+		ImguiWorkingWindow()->scrollPos.x = x;
+		ImguiRefreshScrollOffset();
+	}
+
+	void Imgui::SetScrollPosY( int y )
+	{
+		if( ImguiIsMinized() ) return;
+		ImguiWorkingWindow()->scrollPos.y = y;
+		ImguiRefreshScrollOffset();
+	}
+
+	void Imgui::SetScrollToCenterOnPosY( int y, int only_if_not_in_view_padding_y )
+	{
+		if( ImguiIsMinized() ) return;
+
+		StrongHandle<ImguiWindow> &window = ImguiWorkingWindow();
+
+		if (only_if_not_in_view_padding_y >= 0)
+		{
+			// clamp padding for small windows
+			int pad = min(window->dimen.y / 2, only_if_not_in_view_padding_y);
+
+			int view_start_y = -window->scrollPos.y;
+			if (y >= view_start_y + pad && y <= view_start_y + window->dimen.y - pad)
+				return;
+		}
+
+		// focus at 50% height
+		int scroll_y = (int)-(y - window->pos.y + window->dimen.y*0.50f);
+		window->scrollPos.y = scroll_y;
+		ImguiRefreshScrollOffset();
 	}
 
 	bool Imgui::IsMinimized()

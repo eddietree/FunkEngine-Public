@@ -14,9 +14,10 @@ ImguiWindow::ImguiWindow()
 	autosize = false;
 	locked = false;
 	isSerializable = true;
-	scrollPos = v2(0);
+	scrollPos = v2i(0);
 	pos = v2i(-1);
 	dimenAutosize = v2i(0);
+	dimenAutosizePrev = v2i(0);
 	bgAlpha = 0.5f;
 }
 

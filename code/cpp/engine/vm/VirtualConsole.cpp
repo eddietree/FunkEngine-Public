@@ -101,7 +101,7 @@ void VirtualConsole::Gui()
 
 	if ( m_queueScrollBottom )
 	{
-		Imgui::SetScrollY(1.0f);
+		Imgui::SetScrollRatioY(1.0f);
 		m_queueScrollBottom = false;
 	}
 

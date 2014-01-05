@@ -69,6 +69,7 @@ private:
 		gmuint32 sourceId;
 		gmUserArray tableTraverse;
 		bool jumpToLineNumber;
+		bool jumpToLineNumberIfNotInView;
 
 		void ResetTableSelector();
 	} m_debugState;
