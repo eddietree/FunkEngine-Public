@@ -15,7 +15,7 @@ namespace funk
 		v2i		dimen;
 		v2i		dimenAutosize;		// autosize calculated
 		v2i		dimenAutosizePrev;	// from last frame
-		v2		scrollPos;
+		v2i		scrollPos;			// in pixels
 		int		titleBarMinWidth;	// minimum title bar width
 		float	bgAlpha;
 		

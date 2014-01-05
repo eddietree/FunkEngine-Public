@@ -82,10 +82,10 @@ namespace funk
 		static void		MoveDrawPosNextLine( v2i dimen );
 		static v2i		GetWindowDimen();
 		static v2i		GetWindowDimenAutoSize();
-		static void		SetScrollX( float x /*[0,1]*/);
-		static void		SetScrollY( float y /*[0,1]*/);
-		static void		SetScrollToPosY( int y );
-		static void		SetScrollToPosYIfNotInView( int y, int pad_y );
+		static void		SetScrollRatioY( float ry /*[0,1]*/);
+		static void		SetScrollPosX( int x );
+		static void		SetScrollPosY( int y );
+		static void		SetScrollToCenterOnPosY( int y, int only_if_not_in_view_padding_y = -1 );
 		static bool		IsWindowActive();
 		static bool		IsWidgetActive(int id);
 		static bool		IsWorkingWindowNew();

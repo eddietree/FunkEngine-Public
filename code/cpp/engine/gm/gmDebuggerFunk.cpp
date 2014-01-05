@@ -440,13 +440,13 @@ void gmDebuggerFunk::GuiSource()
 		m_debugState.jumpToLineNumber = false;
 		m_debugState.jumpToLineNumberIfNotInView = false;
 		const int scroll_pos_y = Imgui::GetDrawPos().y + m_debugState.lineNumber * -(Imgui::FONT_HEIGHT + 4);
-		Imgui::SetScrollToPosY( scroll_pos_y );
+		Imgui::SetScrollToCenterOnPosY( scroll_pos_y );
 	}
 	else if ( m_debugState.jumpToLineNumberIfNotInView )
 	{
 		m_debugState.jumpToLineNumberIfNotInView = false;
 		const int scroll_pos_y = Imgui::GetDrawPos().y + m_debugState.lineNumber * -(Imgui::FONT_HEIGHT + 4);
-		Imgui::SetScrollToPosYIfNotInView( scroll_pos_y, Imgui::FONT_HEIGHT * 4 );
+		Imgui::SetScrollToCenterOnPosY( scroll_pos_y, Imgui::FONT_HEIGHT * 4 );
 	}
 
 	Imgui::SetSerializable(false);
